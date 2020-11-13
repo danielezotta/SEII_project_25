@@ -13,10 +13,9 @@ components:
     Product:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 104
+        self:
+          type: string
+          example: /products/2
         name:
           type: string
           example: 'Tablet 8 4/64 GB'
@@ -32,18 +31,15 @@ components:
     Review:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-          example: 666
+        self:
+          type: string
+          example: /products/2/reviews/13
         user:
-          type: integer
-          format: int64
-          example: 69
+          type: string
+          example: /users/69
         product:
-          type: integer
-          format: int64
-          example: 104
+          type: string
+          example: /products/2
         text:
           type: string
           example: 'This product suck!'
@@ -53,26 +49,14 @@ paths:
         description: Complete list of all products currently selling
         summary: Full list of products
         responses:
-          "200": 
+          "200":
             description: Full list of products in the system
             content:
               application/json:
                 schema:
                   type: array
-                  items: 
+                  items:
                     $ref: '#/components/schemas/Product'
-    /products/id:
-      get:
-        description: Retrieves a specific product by an identifier
-        summary: Specific product by id
-        responses:
-          "200": 
-            description: Product object by id
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-    /products/new:
       post:
         description: Add a new product and returns it
         summary: Add a new product
@@ -106,3 +90,60 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Product'
+    /products/id:
+      get:
+        description: Retrieves a specific product by an identifier
+        summary: Specific product by id
+        responses:
+          "200":
+            description: Product object by id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+      delete:
+        description: Remove a product from the shop
+        summary: Remove product
+        responses:
+          "200":
+            description: Removed product
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+    /products/id/reviews:
+      get:
+        description: List all the reviews connected to a product
+        summary: Reviews related to a product
+        responses:
+          "200":
+            description: Reviews related to a product
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Review'
+      post:
+        description: Add a new review to a product
+        summary: Add review
+        responses:
+          "200":
+            description: The added review
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Review'
+    /products?name=&low=&high=&:
+      get:
+        description: List of all products currently selling that match the search
+        summary: List of products searched
+        responses:
+          "200":
+            description: Array of products matching the search
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
