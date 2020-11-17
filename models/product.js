@@ -7,6 +7,7 @@ const Product = mongoose.model('products', {
     description: { type: String, required: true },
     price: { type: Number, required: true },
     amount: { type: Number, required: true }
+
 });
 
 module.exports = Product;
