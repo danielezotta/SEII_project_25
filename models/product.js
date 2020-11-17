@@ -11,3 +11,14 @@ const Product = mongoose.model('products', {
 });
 
 module.exports = Product;
+
+
+/*
+ * {
+  "name" : "sad",
+  "image": "s",
+  "description": "sdasd",
+  "price" : 45,
+  "amount" : 5
+}
+ */
