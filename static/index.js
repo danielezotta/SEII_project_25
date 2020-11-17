@@ -17,16 +17,14 @@ function loadProducts() {
             
             let li = document.createElement('li');
             let span = document.createElement('span');
-
-            span.innerHTML = `<a href="${product.self}"> Nome:${product.name} Descrizione:${product.description} Prezzo:${product.price} Quantità:${product.amount}</a>`;
+            let br = document.createElement('br');
+            span.innerHTML = `<a href="product_details.html?id=${product._id}"> Nome:${product.name} Descrizione:${product.description} Prezzo:${product.price} Quantità:${product.amount}</a>`;
             
             // Append all our elements
             li.appendChild(span);
+            ul.append(br);
             ul.appendChild(li);
         })
     })
     .catch( error => console.error(error) );// If there is any error you will catch them here
-    
 }
-
-loadProducts();
