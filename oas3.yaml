@@ -6,28 +6,10 @@ info:
     license:
       name: MIT
 servers:
-  - url: localhost:8000/api/v1
+  - url: localhost:3000/api/v1
     description: Localhost webserver
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        self:
-          type: string
-          example: /api/v1/users/5fb291268c27d33204eaf0d3
-        name:
-          type: string
-          example: "Mario"
-        surname: 
-          type: string
-          example: "Rossi"
-        email: 
-          type: string
-          example: "mariorossi@mail.com"
-        password:
-          type: string
-          example: "password"
     Product:
       type: object
       properties:
@@ -44,7 +26,7 @@ components:
           type: string
           example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         price:
-          type: number
+          type: float
           example: 69
     Review:
       type: object
@@ -62,232 +44,106 @@ components:
           type: string
           example: 'This product suck!'
 paths:
-  /products:
-    get:
-      description: Complete list of all products currently selling
-      summary: Full list of products
-      responses:
-        "200":
-          description: Full list of products in the system
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-    post:
-      description: Add a new product and returns it
-      summary: Add a new product
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - name
-                - image
-                - description
-                - price
-              properties:
-                name:
-                  type: string
-                  example: 'Tablet 8 4/64 GB'
-                image:
-                  type: string
-                  example: '/res/productid/image.png'
-                description:
-                  type: string
-                  example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                price:
-                  type: number
-                  example: 69.42
-      responses:
-        "200":
-          description: New product added
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-  /products/id:
-    get:
-      description: Retrieves a specific product by an identifier
-      summary: Specific product by id
-      responses:
-        "200":
-          description: Product object by id
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-    delete:
-      description: Remove a product from the shop
-      summary: Remove product
-      responses:
-        "200":
-          description: Removed product
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-  /products/id/reviews:
-    get:
-      description: List all the reviews connected to a product
-      summary: Reviews related to a product
-      responses:
-        "200":
-          description: Reviews related to a product
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Review'
-    post:
-      description: Add a new review to a product
-      summary: Add review
-      responses:
-        "200":
-          description: The added review
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Review'
-  /products?name=&low=&high=&:
-    get:
-      description: List of all products currently selling that match the search
-      summary: List of products searched
-      responses:
-        "200":
-          description: Array of products matching the search
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-  /users:
-      post:
-        description: Add a new user to the database. It is comparable to the registration fase
-        summary: Add new user
+    /products:
+      get:
+        description: Complete list of all products currently selling
+        summary: Full list of products
         responses:
           "200":
-            description: The user created
+            description: Full list of products in the system
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/User'
-  /users/id:
-    get:
-      description: Get a specific user, from an identifier.
-      summary: Get user
-      responses:
-        "200":
-          description: The user corresponding to the identifier
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        "404":
-          description: The user searched is not found
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+      post:
+        description: Add a new product and returns it
+        summary: Add a new product
+        requestBody:
           content:
             application/json:
               schema:
                 type: object
+                required:
+                  - name
+                  - image
+                  - description
+                  - price
                 properties:
-                  code:
+                  name:
                     type: string
-                  message:
+                    example: 'Tablet 8 4/64 GB'
+                  image:
                     type: string
-        "500":
-          description: The request to the database gone wrong.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
+                    example: '/res/productid/image.png'
+                  description:
                     type: string
-                  message:
-                    type: string
-    put:
-      description: Edit the information of an user.
-      summary: Edit user info
-      responses:
-        "201":
-          description: The user informations have been modified.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        "403":
-          description: No valid token provided.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-        "404":
-          description: The user cannot be found in the database.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-        "500":
-          description: The request to the database gone wrong.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-  /users/login:
-    post:
-      description: Returns the authentication token for the current user.
-      summary: Get auth token
-      responses:
-        "200":
-          description: The token requested.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-        "404":
-          description: User not found, can't release token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-        "500":
-          description: The request to the database gone wrong.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: string
-                  message:
-                    type: string
-  
+                    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                  price:
+                    type: float
+                    example: 69,42
+        responses:
+          "200":
+            description: New product added
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+    /products/id:
+      get:
+        description: Retrieves a specific product by an identifier
+        summary: Specific product by id
+        responses:
+          "200":
+            description: Product object by id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+      delete:
+        description: Remove a product from the shop
+        summary: Remove product
+        responses:
+          "200":
+            description: Removed product
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+    /products/id/reviews:
+      get:
+        description: List all the reviews connected to a product
+        summary: Reviews related to a product
+        responses:
+          "200":
+            description: Reviews related to a product
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Review'
+      post:
+        description: Add a new review to a product
+        summary: Add review
+        responses:
+          "200":
+            description: The added review
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Review'
+    /products?name=&low=&high=&:
+      get:
+        description: List of all products currently selling that match the search
+        summary: List of products searched
+        responses:
+          "200":
+            description: Array of products matching the search
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
