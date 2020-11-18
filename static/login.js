@@ -16,13 +16,17 @@ function login()
     })
     .then(resp => {
         if (!resp.ok) {
-            if (resp.status === 400) {
-                throw new Error('La password non corrisponde');
-            } else if (resp.status === 404) {
-                throw new Error('L\'utente non è registrato');
+            if (resp.status == 400) {
+                $("#error_modal_title").text("Errore 400");
+                $("#error_modal_body").text('La password non corrisponde');
+            } else if (resp.status == 404) {
+                $("#error_modal_title").text("Errore 404");
+                $("#error_modal_body").text('L\'utente non è registrato');
             } else {
-                throw new Error('Errore comunicazione con il server');
+                $("#error_modal_title").text("Errore 500");
+                $("#error_modal_body").text('Errore comunicazione con il server');
             }
+            $("#error_modal").modal("show");
         } else {
             resp.json();
         }
@@ -32,8 +36,8 @@ function login()
         localStorage.setItem('token', data.token);
         return;
     }).catch(error => {
-        $("#error_modal_title").text("Errore");
-        $("#error_modal_body").text(error);
+        // $("#error_modal_title").text("Errore");
+        // $("#error_modal_body").text("Errore durante la richiesta");
         $("#error_modal").modal("show");
     });
 
