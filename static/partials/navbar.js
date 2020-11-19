@@ -1,3 +1,4 @@
+// HTML for the navbar, used in all pages to avoid repetition
 document.write(
     `
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

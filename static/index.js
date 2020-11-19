@@ -1,31 +1,27 @@
 /**
  * This function refresh the list of products
  */
-function cloneElement(element){
-    return JSON.parse(JSON.stringify(element));
-}
-
 function loadProducts() {
 
+    // Get the container for the products
     const container = document.getElementById('products');
-
     container.innerHTML = '';
 
     fetch('../api/v1/products')
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(data) { // Here you get the data
-        
-        // console.log(data);
 
+        // Get the number of products (used for the division of the products in rows)
         var number_of_products = data.length;
 
-        
+        // Create an array with all the rows
         var rows = [];
         for (let i = 0; i < number_of_products; i++) {
             rows[i] = document.createElement('div');
             rows[i].classList = "row";
         }
         
+        // Create an array for each of the elements of the products cards
         var cols = [];
         var cards = [];
         var imgs = [];
@@ -40,7 +36,8 @@ function loadProducts() {
 
         var i = 0;
         data.map(function(product) { // Map through the results and for each run the code below
-            // Create all the elements
+            
+            // Create all the elements for every product card
             cols[i] = document.createElement('div');
             cols[i].classList = "col-sm";
             cols[i].style.marginBottom = "1%";
@@ -72,7 +69,7 @@ function loadProducts() {
             cardLinks[i] = document.createElement('div');
             cardLinks[i].classList = "card-body";
             
-            // Append all our elements
+            // Append all the element to eachother
             cardBodies[i].appendChild(names[i]);
             cardBodies[i].appendChild(descriptions[i]);
             cardListGroups[i].appendChild(amounts[i]);
@@ -87,18 +84,18 @@ function loadProducts() {
             
             i ++;
         })
-        while (i%3 != 0){ // Empty column padding to multiples of 3
+        while (i%3 != 0){ // Pad the last row with empty columns to have 3 columns in each row
             let emptyCol = document.createElement('div');
             emptyCol.classList = "col-sm";
             rows[Math.floor(i/3)].appendChild(emptyCol);
             i++;
         }
         
-        rows.forEach(row => { // Add all rows to container
+        rows.forEach(row => { // Add all rows to the container
             container.appendChild(row);
         });
 
         return;
     })
-    .catch( error => console.error(error) );// If there is any error you will catch them here
+    .catch( error => console.error(error) );
 }

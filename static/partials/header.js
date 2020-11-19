@@ -1,3 +1,4 @@
+// HTML for the header, used in all pages to avoid repetition
 document.write(
     `
     <head>
