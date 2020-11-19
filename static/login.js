@@ -1,5 +1,5 @@
-function login()
-{
+function login() {
+    
     //get the form object
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
