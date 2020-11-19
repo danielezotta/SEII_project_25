@@ -1,43 +1,47 @@
-/**
- * This function is a confirm of an order
- * 
- */
-
+function alertInput(msg) {
+    document.getElementById("alert_container").innerHTML = `
+    <div id="alrt" class="alert alert-danger alert-dismissible" runat ="server" id="modalEditError" visible ="false">
+        <button class="close" type="button" onclick="var elem = document.getElementById('alrt');
+                                                      elem.parentNode.removeChild(elem);">&times;</button>
+        ${msg}
+    </div>
+    `;
+}
 
 function ctrlInput() {
 
     //control of "provincia"
     var pr = document.getElementById("inProvincia").value
     if (pr == null || pr == "") {
-        console.log("Provincia non valida");
+        alertInput("Provincia non valida");
         return false;
     }
 
     //control of "comune"
     var com = document.getElementById("inComune").value
     if (com == null || com == "") {
-        console.log("Comune non valido");
+        alertInput("Comune non valido");
         return false;
     }
 
     //control of "via/localita'"
     var via = document.getElementById("inVia/localita'").value
     if (via == null || via == "") {
-        console.log("Via/localita' non valido");
+        alertInput("Via/localita' non valido");
         return false;
     }
 
     //control of "numero civico"
     var civ = document.getElementById("inCivico").value;
     if( isNaN(civ) || civ<1 ) {
-        console.log("Numero civico non valido");
+        alertInput("Numero civico non valido");
         return false;
     }
 
     //control number of credit card
     var numCard = document.getElementById("inNumCard").value;
     if (isNaN(numCard) || numCard<1 ) {
-        console.log("Numero carta non valido");
+        alertInput("Numero carta non valido");
         return false;
     }
 
@@ -45,8 +49,8 @@ function ctrlInput() {
     var cur_year = false;
     var expYCard = document.getElementById('inYExpCard').value
     var d = new Date();
-    if (isNaN(expYCard) || parseInt(expYCard) < d.getFullYear()) {
-        console.log("Numero anno scadenza carta non valido");
+    if (isNaN(expYCard) || expYCard=="" || parseInt(expYCard)<d.getFullYear()) {
+        alertInput("Numero anno scadenza carta non valido");
         return false;
     } else {
         cur_year = parseInt(expYCard) == d.getFullYear();
@@ -54,8 +58,8 @@ function ctrlInput() {
 
     //control expiration month
     var expMCard = document.getElementById('inMExpCard').value;
-    if (isNaN(expMCard) || (expMCard < 1 || expMCard > 12) || (cur_year && parseInt(expMCard)<d.getMonth()) ) {
-        console.log("Numero mese scadenza carta non valido");
+    if (isNaN(expMCard) || expMCard=="" || (expMCard < 1 || expMCard > 12) || (cur_year && parseInt(expMCard)<d.getMonth()) ) {
+        alertInput("Numero mese scadenza carta non valido");
         return false;
     }
 
