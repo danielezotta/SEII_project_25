@@ -9,7 +9,9 @@ const Order = mongoose.model('orders', {
         type: Date,
         default: Date.now,
         required: true
-    }
+    },
+    numCard: { type: Number, required: true },
+    expCard: { type: String, required: true }
 
 });
 
