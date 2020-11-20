@@ -1,11 +1,82 @@
+VIS = 0;
+
+function viewLoader() {
+    if (VIS == 0) {
+        document.getElementById("btnTAcquista").style.display = "none";
+        document.getElementById("loadAcquista").style.display = "block";
+        document.getElementById("btnAcquista").disable = true;
+    } else if (VIS == 1) {
+        document.getElementById("loadAcquista").style.display = "none";
+        document.getElementById("btnTAcquista").style.display = "block";
+        document.getElementById("btnAcquista").disable = false;
+    } else {
+        var elem = document.getElementById('loadAcquista');
+        elem.parentNode.removeChild(elem);
+        var elem2 = document.getElementById('btnAcquista');
+        elem2.parentNode.removeChild(elem2);
+        var elem3 = document.getElementById('btnAnnulla');
+        elem3.parentNode.removeChild(elem3);
+    }
+    return;
+}
+
 function alertInput(msg) {
-    document.getElementById("alert_container").innerHTML = `
-    <div id="alrt" class="alert alert-danger alert-dismissible" runat ="server" id="modalEditError" visible ="false">
-        <button class="close" type="button" onclick="var elem = document.getElementById('alrt');
-                                                      elem.parentNode.removeChild(elem);">&times;</button>
-        ${msg}
-    </div>
-    `;
+    var d = document.createElement("DIV");
+    document.getElementById("alert_container").appendChild(d);
+    d.innerHTML = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            ${msg}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>`;
+    return;
+}
+
+//for simulate click
+function eventFire(el, etype) {
+    if (el.fireEvent) {
+        el.fireEvent('on' + etype);
+    } else {
+        var evObj = document.createEvent('Events');
+        evObj.initEvent(etype, true, false);
+        el.dispatchEvent(evObj);
+    }
+}
+
+function viewStatusOrder(st, res) {
+    var msg = "";
+    var vis;
+    if (st == 400) {
+        console.log(res);
+        if (res.token != null && res.token != "") {
+            msg = res.token + "\n";
+        }
+        if (res.id_user != null && res.id_user != "") {
+            msg = msg + res.id_user;
+        }
+        if (res.error != null && res.error != "") {
+            msg = msg + "Problema formato dati inviati";
+        }
+        vis = 2;
+    } else if (st == 403) {
+        msg = "Scaduto permesso accesso";
+        document.getElementById("btnMLogin").style.display = "block";
+        vis = 1;
+    } else if (st == 404) {
+        msg = "Prodotto non disponibile";
+        vis = 2;
+    } else if (st == 500) {
+        msg = "Errore server";
+        vis = 1;
+    } else {
+        msg = "Prodotto comprato con successo";
+        vis = 2;
+    }
+
+    document.getElementById("modalMsg").innerText = `${msg}`;
+    eventFire(document.getElementById('btnStOrder'), 'click');
+    return vis;
 }
 
 function ctrlInput() {
@@ -25,9 +96,9 @@ function ctrlInput() {
     }
 
     //control of "via/localita'"
-    var via = document.getElementById("inVia/localita'").value
+    var via = document.getElementById("inVia/localita").value
     if (via == null || via == "") {
-        alertInput("Via/localita' non valido");
+        alertInput("Via/localit&#224 non valido");
         return false;
     }
 
@@ -68,28 +139,31 @@ function ctrlInput() {
 
 function createOrder() {
 
+    viewLoader();
+    VIS = 1;
     /*
-     * insert control of input data,
-     * insert control of token
+     * control of input data,
+     * control of token
      */
-
     var url_string = window.location.href;
     var url = new URL(url_string);
     //var product_id = url.searchParams.get("id");
-    var product_id = "5fb54de34008a6127427f71b";
+    var product_id = "5fb54de34008a612742df71b";
 
     //var user_id = localStorage.getItem('user_id');
     //var token = localStorage.getItem('token');
-    var user_id = "5fb291268c27d33204eaf0d3";
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU3ODE3NjUsImV4cCI6MTYwNTg2ODE2NX0.wGwfiFv_GYlsdgqfyseX7kIOWqJ57iVz9IBESrUhHOM";
+    var user_id = "5fb69d1e7cfaa8180c9a37a8";
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU4ODY5MTUsImV4cCI6MTYwNTk3MzMxNX0.YN0ngwlaaDa4uNA4TlF9MV8igHdY3WlXmc0MvQQ2nlE";
 
     //control of input
     if (!ctrlInput()) {
+        viewLoader();
+        VIS = 0;
         return;
     }
 
     //compute address
-    address = document.getElementById("inVia/localita'").value + " " +
+    address = document.getElementById("inVia/localita").value + " " +
               document.getElementById("inCivico").value + " " +  
               document.getElementById("inComune").value + " " +
               document.getElementById("inProvincia").value;  
@@ -98,14 +172,20 @@ function createOrder() {
     expCard = document.getElementById('inMExpCard').value + "/" + document.getElementById('inYExpCard').value;
 
     //request to server
+    var status;
     fetch(`../api/v1/order/`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'x-access-token': token },
         body: JSON.stringify({ product_id: product_id, user_id: user_id, address: address, numCard: numCard, expCard: expCard }),
     })
+    .then(function (resp) {
+        status = resp.status; 
+        return resp;
+    })
+    .then((resp) => resp.json())
     .then(function (data) {
-        console.log(data);
-        console.log("order done!");
+        VIS = viewStatusOrder(status, data);
+        viewLoader();
     })
     .catch(error => console.error(error));
 }

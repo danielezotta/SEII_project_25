@@ -35,7 +35,7 @@ document.write(
     <option value="Ferrara">Ferrara</option>
     <option value="Firenze">Firenze</option>
     <option value="Foggia">Foggia</option>
-    <option value="Forlì-Cesena">Forlì-Cesena</option>
+    <option value="Forlì-Cesena">Forl&#236-Cesena</option>
     <option value="Frosinone">Frosinone</option>
     <option value="Genova">Genova</option>
     <option value="Gorizia">Gorizia</option>
