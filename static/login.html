@@ -20,7 +20,10 @@
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password" autocomplete="current-password">
                         </div>
-                        <button type="button" class="btn btn-primary" onClick="login();">Accedi</button>
+                        <button type="button" id="btn_login" class="btn btn-primary" onClick="login();">
+                            <span id="btn_login_spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            <span id="btn_login_text">Accedi</span>
+                        </button>
                         <div class="text-center mt-3">
                             <p>Non sei registrato? <a href="register.html">Registrati!</a></p>
                         </div>

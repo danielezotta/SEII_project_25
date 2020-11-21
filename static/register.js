@@ -1,5 +1,9 @@
 function register() {
 
+    $('#btn_register_text').addClass('d-none');
+    $('#btn_register_spinner').removeClass('d-none');
+    $("#btn_register").attr("disabled", true);
+
     //get the form object
     var name = $("#name").val();
     var surname = $("#surname").val();
@@ -78,6 +82,9 @@ function register() {
         // $("#error_modal_title").text("Errore");
         // $("#error_modal_body").text("Errore durante la richiesta");
         $("#error_modal").modal("show");
+        $('#btn_register_text').removeClass('d-none');
+        $('#btn_register_spinner').addClass('d-none');
+        $("#btn_register").attr("disabled", false);
     });
 
 };

@@ -12,6 +12,7 @@
                 <div class="col-3"></div>
                 <div class="col-6 mt-5">
                     <form class="card p-3 bg-light mt-5">
+                        <h3 class="mb-3 text-center">Modifica i tuoi dati</h3>
                         <div class="form-group">
                             <label for="name">Nome</label>
                             <input type="text" class="form-control" id="name" name="name">
@@ -32,10 +33,13 @@
                             <label for="password_repeat">Ripeti la password</label>
                             <input type="password" class="form-control" id="password_repeat" name="password_repeat">
                         </div>
-                        <button type="button" class="btn btn-primary" onClick="register();" id="btn_register">
-                            <span id="btn_register_spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            <span id="btn_register_text">Registrati</span>
-                        </button>
+                        <div class="row">
+                            <button type="button" class="m-4 col-sm btn btn-secondary" onClick="window.location.href = document.referrer;">Annulla</button>
+                            <button type="button" class="m-4 col-sm btn btn-primary" onClick="update();" id="btn_update">
+                                <span id="btn_update_spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                <span id="btn_update_text">Modifica</span>
+                            </button>
+                        </div>
                     </form>
                 </div>
                 <div class="col-3"></div>
@@ -62,8 +66,29 @@
             </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="success_modal" tabindex="-1" aria-labelledby="success_modal_title" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="success_modal_title">Successo</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <div class="modal-body">
+                    <p id="success_modal_body">
+                        Le informazioni sono state aggiornate correttamente!
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href = document.referrer;">Chiudi</button>
+                </div>
+            </div>
+        </div>
+
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script type="text/javascript" src="register.js"></script>
+        <script type="text/javascript" src="edit_user.js"></script>
     </body>
 </html>

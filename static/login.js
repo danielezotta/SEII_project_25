@@ -1,5 +1,9 @@
 function login() {
 
+    $('#btn_login_text').addClass('d-none');
+    $('#btn_login_spinner').removeClass('d-none');
+    $("#btn_login").attr("disabled", true);
+
     //get the form object
     var email = $("#email").val();
     var password = $("#password").val();
@@ -39,6 +43,9 @@ function login() {
         // $("#error_modal_title").text(error);
         // $("#error_modal_body").text("Errore durante la richiesta");
         $("#error_modal").modal("show");
+        $('#btn_login_text').removeClass('d-none');
+        $('#btn_login_spinner').addClass('d-none');
+        $("#btn_login").attr("disabled", false);
     });
 
 };
