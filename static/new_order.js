@@ -1,6 +1,9 @@
 VIS = 0;
 
-function viewLoader() {
+/*
+ * This function is used to change the visibility of button to confirm the order of a product
+ */
+function viewBtnForBuy() {
     if (VIS == 0) {
         document.getElementById("btnTAcquista").style.display = "none";
         document.getElementById("loadAcquista").style.display = "block";
@@ -20,6 +23,9 @@ function viewLoader() {
     return;
 }
 
+/*
+ * Function that view an alert if a input is bad format
+ */
 function alertInput(msg) {
     var d = document.createElement("DIV");
     document.getElementById("alert_container").appendChild(d);
@@ -44,6 +50,9 @@ function eventFire(el, etype) {
     }
 }
 
+/*
+ * Function to view the response fo server 
+ */
 function viewStatusOrder(st, res) {
     var msg = "";
     var vis;
@@ -79,6 +88,9 @@ function viewStatusOrder(st, res) {
     return vis;
 }
 
+/*
+ * To control format of inputs  
+ */
 function ctrlInput() {
 
     //control of "provincia"
@@ -137,9 +149,12 @@ function ctrlInput() {
     return true;
 }
 
+/*
+ * Fuction to send a request to confirm a order
+ */
 function createOrder() {
 
-    viewLoader();
+    viewBtnForBuy();
     VIS = 1;
     /*
      * control of input data,
@@ -157,7 +172,7 @@ function createOrder() {
 
     //control of input
     if (!ctrlInput()) {
-        viewLoader();
+        viewBtnForBuy();
         VIS = 0;
         return;
     }
@@ -185,7 +200,8 @@ function createOrder() {
     .then((resp) => resp.json())
     .then(function (data) {
         VIS = viewStatusOrder(status, data);
-        viewLoader();
+        viewBtnForBuy();
     })
     .catch(error => console.error(error));
 }
+
