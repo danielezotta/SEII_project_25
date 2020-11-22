@@ -163,12 +163,12 @@ function createOrder() {
     var url_string = window.location.href;
     var url = new URL(url_string);
     //var product_id = url.searchParams.get("id");
-    var product_id = "5fb54de34008a612742df71b";
+    var product_id = "5fb93335a5fe6c5da4a2d044";
 
     //var user_id = localStorage.getItem('user_id');
     //var token = localStorage.getItem('token');
-    var user_id = "5fb69d1e7cfaa8180c9a37a8";
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDU4ODY5MTUsImV4cCI6MTYwNTk3MzMxNX0.YN0ngwlaaDa4uNA4TlF9MV8igHdY3WlXmc0MvQQ2nlE";
+    var user_id = "5fb291268c27d33204eaf0d3";
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDYwNjA5MDAsImV4cCI6MTYwNjE0NzMwMH0.MiQZN01ZGXwDHmIANghpyQbWCY3NfwCPrLuh--KMk-4";
 
     //control of input
     if (!ctrlInput()) {
