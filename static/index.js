@@ -39,8 +39,7 @@ function loadProducts() {
             
             // Create all the elements for every product card
             cols[i] = document.createElement('div');
-            cols[i].classList = "col-sm";
-            cols[i].style.marginBottom = "1%";
+            cols[i].classList = "col-sm mb-4";
             cards[i] = document.createElement('div');
             cards[i].classList = "card";
             imgs[i] = document.createElement('img');
