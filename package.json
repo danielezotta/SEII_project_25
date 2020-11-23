@@ -15,6 +15,9 @@
     "type": "git",
     "url": "git+https://github.com/danielezotta/SEII_project_25.git"
   },
+  "engines": {
+    "node": "14.x"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
