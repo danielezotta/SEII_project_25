@@ -5,7 +5,7 @@
     "main": "api.js",
     "scripts": {
         "start": "node api.js",
-        "test": "jest"
+        "test": "jest --forceExit"
     },
     "jest": {
         "verbose": true,
