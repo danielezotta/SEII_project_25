@@ -4,12 +4,16 @@
   "description": "Progetto Ingegneria del Software 2, gruppo 25",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "node api.js",
     "test": "jest"
   },
   "jest": {
     "verbose": true,
     "collectCoverage": true
+=======
+    "test": "jest"
+>>>>>>> d93b2cb0db45371d30e010bc3cd99f2e5c3b72b7
   },
   "repository": {
     "type": "git",
