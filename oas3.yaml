@@ -44,7 +44,7 @@ components:
       properties:
         self:
           type: string
-          example: /products/2
+          example: /products/
         name:
           type: string
           example: 'Tablet 8 4/64 GB'
@@ -57,6 +57,28 @@ components:
         price:
           type: number
           example: 69
+    Order:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /api/v1/users/5fbcdc65fc25c72740cd2ef7
+        id_user:
+          type: string
+          example: '5fb291268c27d33204eaf0d3'
+        id_product:
+          type: string
+          example: '5fb291268c27d33204eaf0d3'
+        address:
+          type: string
+          example: 'Lorem ipsum'
+        numCard:
+          type: number
+          example: 1234
+        expCard:
+          type: string
+          example: '12/2020'
+
 paths:
   /products:
     post:
@@ -159,6 +181,100 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+  
+  /orders:
+    post:
+      description: Add a new order and returns it
+      summary: Add a new order
+      security:
+        - token : []
+        - user-id: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id_product
+                - address
+                - numCard
+                - expCard
+              properties:
+                id_product:
+                  type: string
+                  example: '5fb291268c27d33204eaf0d3'
+                address:
+                  type: string
+                  example: 'Lorem ipsum'
+                numCard:
+                  type: number
+                  example: 1234
+                expCard:
+                  type: string
+                  example: '12/2020'
+      responses:
+        "201":
+          description: The order have been created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: One of id_product, address, numCard, expCard, year, month, id_user is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  field:
+                    type: string
+                    example: 'user_id'
+                  error:
+                    type: string
+                    example: 'User id bad format'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token.'
+        "404":
+          description: Product_id or User_id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Product not found.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+  
   /users:
     post:
       description: Add a new user to the database. It is comparable to the registration fase
