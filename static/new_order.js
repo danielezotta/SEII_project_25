@@ -179,7 +179,7 @@ function createOrder() {
     //request to server
     var status;
     fetch(`../api/v1/order/`, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'x-access-token': token,
