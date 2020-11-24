@@ -76,7 +76,7 @@ function viewStatusOrder(st, res) {
         msg = "Prodotto non disponibile";
         vis = 2;
     } else if (st == 500) {
-        msg = "Errore server";
+        msg = "Errore server, riprova pi&#249 tardi";
         vis = 1;
     } else {
         msg = "Prodotto comprato con successo";
@@ -163,12 +163,12 @@ function createOrder() {
     var url_string = window.location.href;
     var url = new URL(url_string);
     //var product_id = url.searchParams.get("id");
-    var product_id = "5fb93335a5fe6c5da4a2d044";
+    var product_id = "5fb91302291e8870ac97748a";
 
     //var user_id = localStorage.getItem('user_id');
     //var token = localStorage.getItem('token');
     var user_id = "5fb291268c27d33204eaf0d3";
-    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDYwNjA5MDAsImV4cCI6MTYwNjE0NzMwMH0.MiQZN01ZGXwDHmIANghpyQbWCY3NfwCPrLuh--KMk-4";
+    var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MDYyMDU0NDcsImV4cCI6MTYwNjI5MTg0N30.HQx6k7XsZgdl7UYepvIDUv6TCE1mVFzPCgpQ58uCwa0";
 
     //control of input
     if (!ctrlInput()) {
