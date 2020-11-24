@@ -51,7 +51,7 @@ function eventFire(el, etype) {
 }
 
 /*
- * Function to view the response fo server 
+ * Function to view the response fo server
  */
 function viewStatusOrder(st, res) {
     var msg = "";
@@ -82,7 +82,7 @@ function viewStatusOrder(st, res) {
 }
 
 /*
- * To control format of inputs  
+ * To control format of inputs
  */
 function ctrlInput() {
 
@@ -159,7 +159,7 @@ function createOrder() {
 
     var user_id = localStorage.getItem('user_id');
     var token = localStorage.getItem('token');
-    
+
     //control of input
     if (!ctrlInput()) {
         viewBtnForBuy();
@@ -169,9 +169,9 @@ function createOrder() {
 
     //compute address
     address = document.getElementById("inVia/localita").value + " " +
-              document.getElementById("inCivico").value + " " +  
+              document.getElementById("inCivico").value + " " +
               document.getElementById("inComune").value + " " +
-              document.getElementById("inProvincia").value;  
+              document.getElementById("inProvincia").value;
 
     numCard = document.getElementById("inNumCard").value;
     expCard = document.getElementById('inMExpCard').value + "/" + document.getElementById('inYExpCard').value;
@@ -180,11 +180,20 @@ function createOrder() {
     var status;
     fetch(`../api/v1/order/`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'x-access-token': token },
-        body: JSON.stringify({ product_id: product_id, user_id: user_id, address: address, numCard: numCard, expCard: expCard }),
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': token,
+            'user-id': user_id
+        },
+        body: JSON.stringify({
+            product_id: product_id,
+            address: address,
+            numCard: numCard,
+            expCard: expCard
+        }),
     })
     .then(function (resp) {
-        status = resp.status; 
+        status = resp.status;
         return resp;
     })
     .then((resp) => resp.json())
@@ -194,4 +203,3 @@ function createOrder() {
     })
     .catch(error => console.error(error));
 }
-
