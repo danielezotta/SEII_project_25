@@ -28,35 +28,8 @@ components:
         price:
           type: float
           example: 69
-    Review:
-      type: object
-      properties:
-        self:
-          type: string
-          example: /products/2/reviews/13
-        user:
-          type: string
-          example: /users/69
-        product:
-          type: string
-          example: /products/2
-        text:
-          type: string
-          example: 'This product suck!'
 paths:
     /products:
-      get:
-        description: Complete list of all products currently selling
-        summary: Full list of products
-        responses:
-          "200":
-            description: Full list of products in the system
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Product'
       post:
         description: Add a new product and returns it
         summary: Add a new product
@@ -70,6 +43,8 @@ paths:
                   - image
                   - description
                   - price
+                  - amount
+                  - userId
                 properties:
                   name:
                     type: string
@@ -81,19 +56,32 @@ paths:
                     type: string
                     example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
                   price:
-                    type: float
-                    example: 69,42
+                    type: number
+                    example: 69.50
+                  amount:
+                    type: number
+                    example: 25
+                  userId:
+                    type: string
+                    example: 5fb291268c27d33204eaf0d3
         responses:
-          "200":
+          "201":
             description: New product added
             content:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Product'
+          "400":
+            description: Error, bad request (wrong data type in a field)
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+          
     /products/id:
-      get:
-        description: Retrieves a specific product by an identifier
-        summary: Specific product by id
+      put:
+        description: Updates a specific product by an identifier
+        summary: Update product
         responses:
           "200":
             description: Product object by id
@@ -101,6 +89,25 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Product'
+          "500":
+            description: Error, wrong request to the database
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+          "400":
+            description: Error, bad request (wrong data type in a field)
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+          "404":
+            description: Error, product not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+          
       delete:
         description: Remove a product from the shop
         summary: Remove product
@@ -111,39 +118,15 @@ paths:
               application/json:
                 schema:
                   $ref: '#/components/schemas/Product'
-    /products/id/reviews:
-      get:
-        description: List all the reviews connected to a product
-        summary: Reviews related to a product
-        responses:
-          "200":
-            description: Reviews related to a product
+          "500":
+            description: Error, wrong request to the database
             content:
               application/json:
                 schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Review'
-      post:
-        description: Add a new review to a product
-        summary: Add review
-        responses:
-          "200":
-            description: The added review
+                  $ref: '#/components/schemas/Product'
+          "404":
+            description: Error, product not found
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/Review'
-    /products?name=&low=&high=&:
-      get:
-        description: List of all products currently selling that match the search
-        summary: List of products searched
-        responses:
-          "200":
-            description: Array of products matching the search
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Product'
+                  $ref: '#/components/schemas/Product'
