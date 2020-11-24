@@ -6,10 +6,39 @@ info:
     license:
       name: MIT
 servers:
-  - url: localhost:3000/api/v1
+  - url: localhost:8000/api/v1
     description: Localhost webserver
+  - url: https://se2-project-25.herokuapp.com/
+    description: Heroku demo
 components:
+  securitySchemes:
+    token:
+      type: apiKey
+      name: x-access-token
+      in: header
+    user-id:
+      type: apiKey
+      name: user-id
+      in: header
   schemas:
+    User:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /api/v1/users/5fb291268c27d33204eaf0d3
+        name:
+          type: string
+          example: "Mario"
+        surname:
+          type: string
+          example: "Rossi"
+        email:
+          type: string
+          example: "mariorossi@mail.com"
+        password:
+          type: string
+          example: "password"
     Product:
       type: object
       properties:
@@ -26,107 +55,375 @@ components:
           type: string
           example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
         price:
-          type: float
+          type: number
           example: 69
 paths:
-    /products:
-      post:
-        description: Add a new product and returns it
-        summary: Add a new product
-        requestBody:
+  /products:
+    post:
+      description: Add a new product and returns it
+      summary: Add a new product
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - image
+                - description
+                - price
+                - amount
+                - userId
+              properties:
+                name:
+                  type: string
+                  example: 'Tablet 8 4/64 GB'
+                image:
+                  type: string
+                  example: '/res/productid/image.png'
+                description:
+                  type: string
+                  example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                price:
+                  type: number
+                  example: 69.50
+                amount:
+                  type: number
+                  example: 25
+                userId:
+                  type: string
+                  example: 5fb291268c27d33204eaf0d3
+      responses:
+        "201":
+          description: New product added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error, bad request (wrong data type in a field)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        
+  /products/id:
+    put:
+      description: Updates a specific product by an identifier
+      summary: Update product
+      responses:
+        "200":
+          description: Product object by id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Error, wrong request to the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error, bad request (wrong data type in a field)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Error, product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        
+    delete:
+      description: Remove a product from the shop
+      summary: Remove product
+      responses:
+        "200":
+          description: Removed product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Error, wrong request to the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Error, product not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /users:
+    post:
+      description: Add a new user to the database. It is comparable to the registration fase
+      summary: Add new user
+      responses:
+        "201":
+          description: The user created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Body values are not valid for the types.
           content:
             application/json:
               schema:
                 type: object
-                required:
-                  - name
-                  - image
-                  - description
-                  - price
-                  - amount
-                  - userId
                 properties:
+                  code:
+                    type: string
+                    example: '400'
+                  message:
+                    type: string
+                    example: 'The field x is not valid, please correct and retry.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+  /users/id:
+    get:
+      description: Get a specific user, from an identifier. If the header contains token and user id equals to the one on the request, then can view all params. Otherwise only name and self will show.
+      summary: Get user
+      responses:
+        "200":
+          description: The user corresponding to the identifier if token is valid and user id is right.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "200":
+          description: The user corresponding to the identifier, if token not valid, or user id not equals.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  self:
+                    type: string
+                    example: /api/v1/users/5fb291268c27d33204eaf0d3
                   name:
                     type: string
-                    example: 'Tablet 8 4/64 GB'
-                  image:
+                    example: "Mario"
+        "404":
+          description: The user searched is not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
                     type: string
-                    example: '/res/productid/image.png'
-                  description:
+                    example: '404'
+                  message:
                     type: string
-                    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                  price:
-                    type: number
-                    example: 69.50
-                  amount:
-                    type: number
-                    example: 25
-                  userId:
+                    example: 'The user can not be found.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+    put:
+      description: Edit the information of an user, listing only the fields changed.
+      summary: Edit user info
+      security:
+        - token : []
+        - user-id: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Mario"
+                surname:
+                  type: string
+                  example: "Rossi"
+                email:
+                  type: string
+                  example: "mariorossi@mail.com"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        "201":
+          description: The user informations have been modified.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "403":
+          description: No valid token provided or parameters id not equal to the header id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Token not valid'
+        "404":
+          description: The user cannot be found in the database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '404'
+                  message:
+                    type: string
+                    example: 'The user can not be found.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+    delete:
+      description: Delete one user by the id.
+      summary: Delete user
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "200":
+          description: The user removed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "403":
+          description: No valid token provided or parameters id not equal to the header id.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Token not valid'
+        "404":
+          description: The user cannot be found in the database
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '404'
+                  message:
+                    type: string
+                    example: 'The user can not be found.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+  /users/login:
+    post:
+      description: Returns the authentication token for the current user.
+      summary: Get auth token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "mariorossi@mail.it"
+                password:
+                  type: string
+                  example: "password"
+      responses:
+        "200":
+          description: The token requested.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Success'
+                  user_id:
                     type: string
                     example: 5fb291268c27d33204eaf0d3
-        responses:
-          "201":
-            description: New product added
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "400":
-            description: Error, bad request (wrong data type in a field)
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          
-    /products/id:
-      put:
-        description: Updates a specific product by an identifier
-        summary: Update product
-        responses:
-          "200":
-            description: Product object by id
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "500":
-            description: Error, wrong request to the database
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "400":
-            description: Error, bad request (wrong data type in a field)
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "404":
-            description: Error, product not found
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          
-      delete:
-        description: Remove a product from the shop
-        summary: Remove product
-        responses:
-          "200":
-            description: Removed product
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "500":
-            description: Error, wrong request to the database
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
-          "404":
-            description: Error, product not found
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/Product'
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWZiNjllMzc3Y2ZhYTgxODBjOWEzN2FhIiwiZW1haWwiOiJtYXN0ZXJAY2lzY28uY29tIiwiaWF0IjoxNjA2MjIxODMwLCJleHAiOjE2MDYyNjUwMzB9.bKWZ7oMXjEDnZPme9PKanW3Wmp2on_8kdEbcyFWK1pQ
+        "404":
+          description: User not found, can't release token.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '404'
+                  message:
+                    type: string
+                    example: 'The user can not be found.'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
