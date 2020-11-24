@@ -69,7 +69,7 @@ function viewStatusOrder(st, res) {
         msg = "Prodotto non disponibile";
         vis = 2;
     } else if (st == 500) {
-        msg = "Errore server, riprova pi&#249 tardi";
+        msg = "Errore server, riprova più tardi";
         vis = 1;
     } else {
         msg = "Prodotto comprato con successo";
