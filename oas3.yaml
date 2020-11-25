@@ -57,6 +57,12 @@ components:
         price:
           type: number
           example: 69
+        amount:
+          type: integer
+          example: 100
+        user_id:
+          type: string
+          example: '5fb291268c27d33204eaf0d3'
     Order:
       type: object
       properties:
@@ -81,6 +87,51 @@ components:
 
 paths:
   /products:
+      get:
+        description: Complete list of all available products
+        summary: List of products
+        responses:
+          "200":
+            description: List of products
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+          "500":
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: string
+                  example: 'The request to the database went wrong. Try later or contact us.'
+    /products/id:
+      get:
+        description: Retrieves a specific product given an id
+        summary: Product with given id
+        responses:
+          "200":
+            description: Product with given id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Product'
+          "404":
+            description: Specified product does not exist
+            content:
+              application/json:
+                schema:
+                  type: string
+                  example: "The product can't be found."
+            
+          "500":
+            description: Server error
+            content:
+              application/json:
+                schema:
+                  type: string
+                  example: 'The request to the database went wrong. Try later or contact us.'
     post:
       description: Add a new product and returns it
       summary: Add a new product
