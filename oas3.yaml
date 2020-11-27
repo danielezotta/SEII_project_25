@@ -106,6 +106,7 @@ paths:
               schema:
                 type: string
                 example: 'The request to the database went wrong. Try later or contact us.'
+  
   /products/id:
     get:
       description: Retrieves a specific product given an id
@@ -325,7 +326,192 @@ paths:
                   message:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'
-  
+    get:
+      description: get all orders associated with id_user
+      summary: get all orders
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "200":
+          description: at least one order is associed with id_user
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        "404":
+          description: Order_id with User_id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No order associated with user_id'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+
+  /orders/id:
+    get:
+      description: get specific order associated with id_user
+      summary: get order
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "200":
+          description: The specific order exists and it is associated with user id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "404":
+          description: Order_id with User_id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The order associated with user_id not found'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.' 
+    put:
+      description: edit address of an order associated with id_user
+      summary: edit addresss of an order 
+      security:
+        - token : []
+        - user-id: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+              properties:
+                address:
+                  type: string
+                  example: 'Lorem ipsum'
+      responses:
+        "200":
+          description: The specific order updated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'true'
+                  message:
+                    type: string
+                    example: 'update order'
+        "404":
+          description: Order_id with User_id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The order associated with user_id not found'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.' 
+    delete:
+        description: delete specific order associated with id_user
+        summary: delete order
+        security:
+          - token : []
+          - user-id: []
+        responses:
+          "200":
+            description: The specific order exists and deleted.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: string
+                      example: 'true'
+                    message:
+                      type: string
+                      example: 'order deleted'
+          "404":
+            description: Order_id with User_id not found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: string
+                      example: 'false'
+                    message:
+                      type: string
+                      example: 'The order associated with user_id not found'
+          "500":
+            description: The request to the database gone wrong.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    success:
+                      type: string
+                      example: 'false'
+                    message:
+                      type: string
+                      example: 'The request to the database gone wrong. Try later or contact us.' 
+
   /users:
     post:
       description: Add a new user to the database. It is comparable to the registration fase
