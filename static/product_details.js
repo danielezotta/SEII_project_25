@@ -73,8 +73,42 @@ function loadPage() {
         //cerca review di utente corrente
         //se c'è mettila in cima in myReview
         //altrimenti metti la form per crearla
+        var myReviewData = 0;
+        reviews.forEach(review => {
+            if ( review.userId == userId ){
+                myReviewData = review;
+                break;
+            }
+        });
+        // Se è vero metti il form per creare una review nuova, altrimenti stampa la tua
+        if ( myReviewData == 0 ){
+            var form = document.createElement('form');
+            var titleFormGroup = document.createElement('div');
+            titleFormGroup.classList = "form-group";
+            var titleLabel = document.createElement('label');
+            titleLabel.innerHTML = "Titolo *";
+            titleLabel.htmlFor = "title";
+            var titleInput = document.createElement('input');
+            titleInput.classList = "form-control";
+            titleInput.type = "text";
+            titleInput.id = "title";
+            var textFormGroup = document.createElement('div');
+            textFormGroup.classList = "form-group";
+            var textLabel = document.createElement('label');
+            textLabel.innerHTML = "Testo *";
+            textLabel.htmlFor = "text";
+            var textInput = document.createElement('input');
+            textInput.classList = "form-control";
+            textInput.type = "text";
+            textInput.id = "text";
+
+        } else {
+
+        }
+        console.log(reviews);
         reviews.map(function(review) {
             //metti tutte le altre review
         })
     })
+    .catch( error => console.error(error) );
 }
