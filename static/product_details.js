@@ -1,18 +1,25 @@
 /**
  * This function gets details of a product
  */
-function loadProduct() {
+function loadPage() {
 
     // Get the container and empty it
     const container = document.getElementById('product');
     container.innerHTML = '';
 
+    const myReview = document.getElementById('myReview');
+    myReview.innerHTML = '';
+
+    const reviews = document.getElementById('reviews');
+    reviews.innerHTML = '';
+
     // Get the id of the product to display the details of
     var url_string = window.location.href;
     var url = new URL(url_string);
-    var id = url.searchParams.get("id");
+    var productId = url.searchParams.get("id");
+    var userId = localStorage.getItem('user_id');
 
-    fetch(`../api/v1/products/${id}`)
+    fetch(`../api/v1/products/${productId}`)
     .then((resp) => resp.json()) // Transform the data into json
     .then(function(product) { // Here you get the data
         
@@ -59,4 +66,15 @@ function loadProduct() {
         
     })
     .catch( error => console.error(error) );
+
+    fetch(`../api/v1/reviews/${productId}`)
+    .then((resp) => resp.json()) // Transform the data into json
+    .then(function(reviews) { // Here you get the data
+        //cerca review di utente corrente
+        //se c'è mettila in cima in myReview
+        //altrimenti metti la form per crearla
+        reviews.map(function(review) {
+            //metti tutte le altre review
+        })
+    })
 }
