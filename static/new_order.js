@@ -39,17 +39,6 @@ function alertInput(msg){
     return;
 }
 
-//for simulate click
-function eventFire(el, etype) {
-    if(el.fireEvent){
-        el.fireEvent('on' + etype);
-    }else{
-        var evObj = document.createEvent('Events');
-        evObj.initEvent(etype, true, false);
-        el.dispatchEvent(evObj);
-    }
-}
-
 /*
  * Function to view the response fo server
  */
@@ -77,7 +66,7 @@ function viewStatusOrder(st, res) {
     }
 
     document.getElementById("modalMsg").innerText = `${msg}`;
-    eventFire(document.getElementById('btnStOrder'), 'click');
+    $("#Modal").modal("show");
     return vis;
 }
 
