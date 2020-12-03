@@ -114,6 +114,13 @@ function ctrlInput(){
         return false;
     }
 
+    //control of "n° prodotti"
+    var amount = document.getElementById("inAmount").value;
+    if( isNaN(amount) || amount<1 ){
+        alertInput("Numero prodotti selezionati non valido");
+        return false;
+    }
+
     //control number of credit card
     var numCard = document.getElementById("inNumCard").value;
     if( isNaN(numCard) || numCard<1 ){
@@ -168,13 +175,13 @@ function createOrder(){
     }
 
     //compute address
-    address = document.getElementById("inVia/localita").value + " " +
+    var address = document.getElementById("inVia/localita").value + " " +
               document.getElementById("inCivico").value + " " +
               document.getElementById("inComune").value + " " +
               document.getElementById("inProvincia").value;
-
-    numCard = document.getElementById("inNumCard").value;
-    expCard = document.getElementById('inMExpCard').value + "/" + document.getElementById('inYExpCard').value;
+    var amount = document.getElementById("inAmount").value;
+    var numCard = document.getElementById("inNumCard").value;
+    var expCard = document.getElementById('inMExpCard').value + "/" + document.getElementById('inYExpCard').value;
 
     //request to server
     var status;
@@ -188,6 +195,7 @@ function createOrder(){
         body: JSON.stringify({
             product_id: product_id,
             address: address,
+            amount: amount,
             numCard: numCard,
             expCard: expCard
         }),
@@ -200,6 +208,45 @@ function createOrder(){
     .then(function (data) {
         VIS = viewStatusOrder(status, data);
         viewBtnForBuy();
+    })
+    .catch(error => console.error(error));
+}
+
+
+/*
+ * Funtion to view number of product available
+ */
+function viewProductsAvailable(){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var product_id = url.searchParams.get("id");
+
+    var user_id = localStorage.getItem('user_id');
+    var token = localStorage.getItem('token');
+    var status;
+    fetch( `../api/v1/products/${product_id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'x-access-token': token,
+            'user-id': user_id
+        }
+    } )
+    .then( function (resp) {
+        status = resp.status;
+        return resp;
+    } )
+    .then( (resp) => resp.json() )
+    .then( function (data) {
+        if( status==200 ){
+            am = document.createElement('span');
+            am.innerHTML = data.amount;
+            document.getElementById( 'outAmount' ).appendChild(am);
+            document.getElementById( 'inAmount' ).max = data.amount;
+        }else{
+            VIS = viewStatusOrder(status, data);
+            viewBtnForBuy();
+        }
     })
     .catch(error => console.error(error));
 }
