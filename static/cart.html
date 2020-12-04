@@ -6,17 +6,57 @@
     </head>
     <body>
         <script src="partials/navbar.js"></script>
-        <div class="container bg-light mt-5 mb-5 text-center">
+        <div class="container bg-light mt-5 mb-5 pt-3 pb-3">
             <div class="row mb-3">
-                <div class="col-sm">
-                </div>
                 <div class="col-sm">
                     <h2>Carrello</h2>
                 </div>
-                <div class="col-sm">
+                <div class="col-sm text-right">
+                    <button type="button" class="btn btn-primary">Acquista</button>
                 </div>
             </div>
-            <div class="container bg-light" id="cart"></div>
+            <div class="text-center m-5" id="loading_cart">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <div class="container bg-light" id="cart_container">
+                <!-- <div class="card mt-2 mb-2">
+                    <div class="row"> -->
+                        <!-- <div class="col-md-4">
+                            <img src="https://i.imgur.com/EdqVuw9.jpg" class="card-img"/>
+                        </div> -->
+                        <!-- <div class="col-sm embed-responsive embed-responsive-16by9">
+                            <img alt="" class="card-img embed-responsive-item" src="https://i.imgur.com/EdqVuw9.jpg" />
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">Oggetto</h5>
+                                <p class="card-text">
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                                    nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                                    pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+                                    culpa qui officia deserunt mollit anim id est laborum.
+                                </p>
+                                <div class="row mt-5">
+                                    <div class="col-sm">
+                                        <div class="form-inline">
+                                            <label class="my-1 mr-2" for="cart-item-amount">Quantità </label>
+                                            <input class="my-1 mr-sm-2 form-control col-md-3" type="number" id="cart-item-amount" value="1" min="1" max="5">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm text-right">
+                                        <p class="cart-text font-weight-bold h1">29,32 €</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
         </div>
         <script src="cart.js"></script>
     </body>
