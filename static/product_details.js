@@ -77,11 +77,13 @@ function loadPage() {
         reviews.forEach(review => {
             if ( review.userId == userId ){
                 myReviewData = review;
-                break;
+                return;
             }
         });
         // Se è vero metti il form per creare una review nuova, altrimenti stampa la tua
         if ( myReviewData == 0 ){
+            var title = document.createElement('h3');
+            title.innerHTML = "Lascia una recensione!";
             var form = document.createElement('form');
             var titleFormGroup = document.createElement('div');
             titleFormGroup.classList = "form-group";
@@ -92,22 +94,56 @@ function loadPage() {
             titleInput.classList = "form-control";
             titleInput.type = "text";
             titleInput.id = "title";
+            titleInput.required = "true";
             var textFormGroup = document.createElement('div');
             textFormGroup.classList = "form-group";
             var textLabel = document.createElement('label');
             textLabel.innerHTML = "Testo *";
             textLabel.htmlFor = "text";
-            var textInput = document.createElement('input');
+            var textInput = document.createElement('textarea');
             textInput.classList = "form-control";
-            textInput.type = "text";
             textInput.id = "text";
+            textInput.style.height = "250px";
+            textInput.required = "true";
+            var ratingFormGroup = document.createElement('div');
+            ratingFormGroup.classList = "form-group";
+            var ratingLabel = document.createElement('label');
+            ratingLabel.innerHTML = "Voto *";
+            ratingLabel.htmlFor = "rating";
+            var ratingInput = document.createElement('input');
+            ratingInput.classList = "form-control";
+            ratingInput.type = "text";
+            ratingInput.id = "rating";
+            ratingInput.required = "true";
+            var submitButton = document.createElement('button');
+            submitButton.innerHTML = "Invia";
+            submitButton.type = "submit";
+            submitButton.classList = "btn btn-primary";
 
+            titleFormGroup.appendChild(titleLabel);
+            titleFormGroup.appendChild(titleInput);
+            textFormGroup.appendChild(textLabel);
+            textFormGroup.appendChild(textInput);
+            ratingFormGroup.appendChild(ratingLabel);
+            ratingFormGroup.appendChild(ratingInput);
+
+            form.appendChild(titleFormGroup);
+            form.appendChild(textFormGroup);
+            form.appendChild(ratingFormGroup);
+            form.appendChild(submitButton);
+
+            myReview.appendChild(title);
+            myReview.appendChild(form);
         } else {
 
         }
-        console.log(reviews);
+        
         reviews.map(function(review) {
-            //metti tutte le altre review
+            if ( review.userId == userId ){
+                return;
+            }
+
+            // Card per recensioni
         })
     })
     .catch( error => console.error(error) );
