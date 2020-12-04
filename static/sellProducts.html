@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SEII_project_25</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="partials/header.js"></script>
 </head>
 <body>
+    <script src="sellProducts.js"></script>
+    <script src="partials/navbar.js"></script>
     <div class="bg-light d-flex justify-content-center" style="width:100%; padding:20px">
 
         <div class="card" style="width:80%">
@@ -18,42 +15,83 @@
 
                 <label for="nomeProdotto">Nome prodotto:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nomeProdotto" placeholder="Inserisci prodotto">
+                    <input type="text" class="form-control" id="nameProduct" placeholder="Inserisci prodotto">
                 </div>
 
                 <label for="immagine">Immagine:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="immagine" placeholder="Inserisci immagine">
+                    <input type="text" class="form-control" id="image" placeholder="Inserisci immagine">
                 </div>
 
                 <label for="descrizione">Descrizione:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="descrizione" placeholder="Inserisci descrizione">
+                    <input type="text" class="form-control" id="description" placeholder="Inserisci descrizione">
                 </div>
 
                 <label for="prezzo">Prezzo:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="prezzo" placeholder="Inserisci prezzo">
+                    <input type="text" class="form-control" id="price" placeholder="Inserisci prezzo">
                 </div>
 
-                <label for="prezzo">Numero pezzi:</label>
+                <label for="nPezzi">Numero pezzi:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nPezzi" placeholder="Inserisci numero di pezzi">
+                    <input type="text" class="form-control" id="amount" placeholder="Inserisci numero di pezzi">
                 </div>
 
-                <label for="prezzo">ID utente:</label>
+                <label for="userId">ID utente:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="prezzo" placeholder="Inserisci ID utente">
+                    <input type="text" class="form-control" id="userId" placeholder="Inserisci ID utente">
                 </div>
 
                 <div class="mt-3" id="alert_container"></div>
-                <button id="btnVendi" type="button" class="btn btn-secondary" onclick="createProduct()">
-                    <span id="loadVendita" style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <button id="btnVendi" type="button" class="btn btn-secondary" onclick="addProduct()">
+                    <span id="loadVendita"  style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span id="btnVendita" style="display:block">Metti in vendita</span>
                 </button>
                 <button id="btnAnnulla" type="button" class="btn btn-secondary" onclick=" window.location.href = '/index.html'">
                     <span>Annulla</span>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="success_modal" tabindex="-1" aria-labelledby="success_modal_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="success_modal_title">Successo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                <p id="success_modal_body">
+                    L'articolo è stato pubblicato correttamente!
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal" onclick="window.location.href = document.referrer;">Chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="error_modal" tabindex="-1" aria-labelledby="error_modal_title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="error_modal_title">Errore</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            <div class="modal-body">
+                <p id="error_modal_body">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
             </div>
         </div>
     </div>
