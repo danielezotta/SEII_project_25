@@ -58,11 +58,12 @@ function parametersControl(){
   }
 
   //It controls the correctness of the user ID
-  var userId = document.getElementById("userId").value;
+  /*var userId = document.getElementById("userId").value;
   if(!userId || typeof userId != 'string'){
       alertInput('Il campo "ID utente" non può essere vuoto e deve essere un numero maggiore di zero');
       return false;
-  }
+  }*/
+
   console.log("HO CONTROLLATO I PARAMETRI");
 
   return true;
@@ -81,30 +82,46 @@ function addProduct(){
   var description = document.getElementById("description").value;
   var price = document.getElementById("price").value;
   var amount = document.getElementById("amount").value;
-  var userId = document.getElementById("userId").value;
+
+  var token = localStorage.getItem('token');
+  var user_id = localStorage.getItem('user_id');
 
   fetch('../api/v1/products', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
+          'user-id': user_id,
+          'x-access-token': token
       },
       body: JSON.stringify({
           name: nameProduct,
           image: image,
           description: description,
           price: price,
-          amount: amount,
-          userId: userId
+          amount: amount
       }),
   })
   .then((resp) => {
+                  if(!resp.ok){
                     if(resp.status==500){
-                      //$("#error_modal").modal("show");
+                      $("#error_modal_title").text("Errore 500");
+                      $("#error_modal_body").text('Problemi con il server');
                     }
-                    else if(resp.status==201){
-                      $("#success_modal").modal("show");
-                      //console.log(resp.status);
+                    else if(resp.status==403){
+                      console.log("ERRORE 403");
+                      $("#error_modal_title").text("Errore 403");
+                      $("#error_modal_body").text('Token d\'autenticazione scaduto');
                     }
-                    return resp.json()})
+                    else if(resp.status==401){
+                      console.log("ERRORE 401");
+                      $("#error_modal_title").text("Errore 403");
+                      $("#error_modal_body").text('Nessun token fornito');
+                    }
+                    $("#error_modal").modal("show");
+                  }
+                  else if(resp.status==201){
+                    $("#success_modal").modal("show");
+                  }
+                  return resp.json()})
   .catch(error => console.error(error));
 }
