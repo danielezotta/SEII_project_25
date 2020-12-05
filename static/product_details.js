@@ -10,8 +10,8 @@ function loadPage() {
     const myReview = document.getElementById('myReview');
     myReview.innerHTML = '';
 
-    const reviews = document.getElementById('reviews');
-    reviews.innerHTML = '';
+    const reviewsContainer = document.getElementById('reviews');
+    reviewsContainer.innerHTML = '';
 
     // Get the id of the product to display the details of
     var url_string = window.location.href;
@@ -80,8 +80,12 @@ function loadPage() {
                 return;
             }
         });
+        
         // Se è vero metti il form per creare una review nuova, altrimenti stampa la tua
         if ( myReviewData == 0 ){
+            // Get the number of reviews
+            var number_of_reviews = reviews.length;
+
             var title = document.createElement('h3');
             title.innerHTML = "Lascia una recensione!";
             var form = document.createElement('form');
@@ -135,15 +139,89 @@ function loadPage() {
             myReview.appendChild(title);
             myReview.appendChild(form);
         } else {
+            // Get the number of reviews
+            var number_of_reviews = reviews.length - 1;
 
+            var title = document.createElement('h3');
+            title.innerHTML = "La mia recensione";
+            // Card per recensioni
+            var row = document.createElement('div');
+            row.classList = "row";
+            var card = document.createElement('div');
+            card.classList = "card col-12 mt-2 mb-2";
+            card.style = "padding:0px";
+            var cardTitleGroup = document.createElement('div');
+            cardTitleGroup.classList = "card-header";
+            cardTitle = document.createElement('h4');
+            cardTitle.classList = "card-title";
+            cardTitle.innerHTML = myReviewData.title;
+            var cardListGroup = document.createElement('ul');
+            cardListGroup.classList = "list-group list-group-flush";
+            var cardScore = document.createElement('li');
+            cardScore.classList = "list-group-item";
+            cardScore.innerHTML = myReviewData.score;
+            var cardText = document.createElement('li');
+            cardText.classList = "list-group-item";
+            cardText.style = "white-space: pre-wrap;";
+            cardText.innerHTML = myReviewData.text;
+
+            cardTitleGroup.appendChild(cardTitle);
+            cardListGroup.appendChild(cardScore);
+            cardListGroup.appendChild(cardText);
+            card.appendChild(cardTitleGroup);
+            card.appendChild(cardListGroup);
+            row.appendChild(card);
+
+            myReview.appendChild(title);
+            myReview.appendChild(row);
         }
         
-        reviews.map(function(review) {
+        // Create an array with all the rows
+        var rows = [];
+        for (let i = 0; i < number_of_reviews; i++) {
+            rows[i] = document.createElement('div');
+            rows[i].classList = "row";
+        }
+
+        var cards = [];
+        var cardTitleGroups = [];
+        var cardTitles = [];
+        var cardListGroups = [];
+        var cardScores = [];
+        var cardTexts = [];
+
+        reviews.map(function(review, i) {
             if ( review.userId == userId ){
                 return;
             }
 
             // Card per recensioni
+            cards[i] = document.createElement('div');
+            cards[i].classList = "card col-12 mt-2 mb-2";
+            cards[i].style = "padding:0px";
+            cardTitleGroups[i] = document.createElement('div');
+            cardTitleGroups[i].classList = "card-header";
+            cardTitles[i] = document.createElement('h4');
+            cardTitles[i].classList = "card-title";
+            cardTitles[i].innerHTML = review.title;
+            cardListGroups[i] = document.createElement('ul');
+            cardListGroups[i].classList = "list-group list-group-flush";
+            cardScores[i] = document.createElement('li');
+            cardScores[i].classList = "list-group-item";
+            cardScores[i].innerHTML = review.score;
+            cardTexts[i] = document.createElement('li');
+            cardTexts[i].classList = "list-group-item";
+            cardTexts[i].style = "white-space: pre-wrap;";
+            cardTexts[i].innerHTML = review.text;
+
+            cardTitleGroups[i].appendChild(cardTitles[i]);
+            cardListGroups[i].appendChild(cardScores[i]);
+            cardListGroups[i].appendChild(cardTexts[i]);
+            cards[i].appendChild(cardTitleGroups[i]);
+            cards[i].appendChild(cardListGroups[i]);
+            rows[i].appendChild(cards[i]);
+
+            reviewsContainer.appendChild(rows[i]);
         })
     })
     .catch( error => console.error(error) );
