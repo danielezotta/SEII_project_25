@@ -80,11 +80,19 @@ function loadPage() {
                 return;
             }
         });
-        
+
+        var number_of_reviews;
+
         // Se è vero metti il form per creare una review nuova, altrimenti stampa la tua
-        if ( myReviewData == 0 ){
+        if ( userId == null ){
+            number_of_reviews = reviews.length;
+            var hr = document.getElementById("myReviewHr");
+            hr.parentNode.removeChild(hr);
+            var container = document.getElementById("myReview");
+            container.parentNode.removeChild(container);
+        } else if ( myReviewData == 0 ){
             // Get the number of reviews
-            var number_of_reviews = reviews.length;
+            number_of_reviews = reviews.length;
 
             var title = document.createElement('h3');
             title.innerHTML = "Lascia una recensione!";
@@ -109,38 +117,40 @@ function loadPage() {
             textInput.id = "text";
             textInput.style.height = "250px";
             textInput.required = "true";
-            var ratingFormGroup = document.createElement('div');
-            ratingFormGroup.classList = "form-group";
-            var ratingLabel = document.createElement('label');
-            ratingLabel.innerHTML = "Voto *";
-            ratingLabel.htmlFor = "rating";
-            var ratingInput = document.createElement('input');
-            ratingInput.classList = "form-control";
-            ratingInput.type = "text";
-            ratingInput.id = "rating";
-            ratingInput.required = "true";
+            var scoreFormGroup = document.createElement('div');
+            scoreFormGroup.classList = "form-group";
+            var scoreLabel = document.createElement('label');
+            scoreLabel.innerHTML = "Voto *";
+            scoreLabel.htmlFor = "score";
+            var scoreInput = document.createElement('input');
+            scoreInput.classList = "form-control";
+            scoreInput.type = "text";
+            scoreInput.id = "score";
+            scoreInput.required = "true";
             var submitButton = document.createElement('button');
             submitButton.innerHTML = "Invia";
-            submitButton.type = "submit";
+            //submitButton.onclick = "createReview()";
+            submitButton.addEventListener('click', function(e){createReview()}, false);
             submitButton.classList = "btn btn-primary";
+            submitButton.type = "button";
 
             titleFormGroup.appendChild(titleLabel);
             titleFormGroup.appendChild(titleInput);
             textFormGroup.appendChild(textLabel);
             textFormGroup.appendChild(textInput);
-            ratingFormGroup.appendChild(ratingLabel);
-            ratingFormGroup.appendChild(ratingInput);
+            scoreFormGroup.appendChild(scoreLabel);
+            scoreFormGroup.appendChild(scoreInput);
 
             form.appendChild(titleFormGroup);
             form.appendChild(textFormGroup);
-            form.appendChild(ratingFormGroup);
+            form.appendChild(scoreFormGroup);
             form.appendChild(submitButton);
 
             myReview.appendChild(title);
             myReview.appendChild(form);
         } else {
             // Get the number of reviews
-            var number_of_reviews = reviews.length - 1;
+            number_of_reviews = reviews.length - 1;
 
             var title = document.createElement('h3');
             title.innerHTML = "La mia recensione";
@@ -225,4 +235,60 @@ function loadPage() {
         })
     })
     .catch( error => console.error(error) );
+}
+
+function createReview(){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var productId = url.searchParams.get("id");
+    var userId = localStorage.getItem('user_id');
+
+    //get data from the form
+    var title = $("#title").val();
+    var text = $("#text").val();
+    var score = $("#score").val();
+    
+    if (!title || title.length < 0) {
+        return;
+    }
+
+    if (!text || text.length < 0) {
+        return;
+    }
+
+    if (!score || score < 1 || score > 5){
+        return;
+    }
+
+    var review = {
+        title: title,
+        score: score,
+        text: text,
+        productId: productId,
+        userId: userId
+    }
+
+    fetch('../api/v1/reviews/', {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(review),
+    })
+    .then(resp => {
+        if (!resp.ok) {
+            if (resp.status == 400) {
+                console.log("Errore 400: Alcuni dati sono errati");
+            } else {
+                console.log("Errore 500: Errore di comunicazione con il server");
+            }
+        } else {
+            resp.json();
+        }
+    })
+    
+    .then(function() {
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }).catch(error => {
+        console.log(error);
+    });
 }
