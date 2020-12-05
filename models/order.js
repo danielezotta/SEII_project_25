@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const Order = mongoose.model('orders', {
 
-    id_user: {type: mongoose.Schema.Types.ObjectId, required: true},
-    id_product: {type: mongoose.Schema.Types.ObjectId, required: true},
+    user_id: {type: mongoose.Schema.Types.ObjectId, required: true},
+    product_id: {type: mongoose.Schema.Types.ObjectId, required: true},
     address: {type: String, required: true},
     timeStamp: {
         type: Date,
