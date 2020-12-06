@@ -71,7 +71,7 @@ function loadMyProducts(){
           amounts[i].classList = "list-group-item";
           amounts[i].innerHTML = product.amount + " disponibili";
           ids[i] = document.createElement('a');
-          ids[i].href = "updateProducts.html?id="+ product._id;
+          ids[i].href = "sellProducts.html?id="+ product._id;
           ids[i].classList = "card-link";
           ids[i].innerHTML = "Modifica";
           cardLinks[i] = document.createElement('div');
