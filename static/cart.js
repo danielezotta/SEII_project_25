@@ -32,7 +32,14 @@ function loadCart() {
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <h5 class="card-title">${product.name}</h5>
+                                    <div class="card-title row">
+                                        <div class="col-sm">
+                                            <p class="h4">${product.name}</p>
+                                        </div>
+                                        <div class="col-sm  text-right">
+                                            <p class="btn btn-outline-danger" onclick="deleteProduct('${item.productId}')">X Rimuovi</p>
+                                        </div>
+                                    </div>
                                     <p class="card-text">${product.description}</p>
                                     <div class="row mt-auto">
                                         <div class="col-sm">
@@ -76,7 +83,62 @@ function changeProductAmount(element, productId) {
         })
     })
     .then(resp => resp.json())
-    .then((product) => {
+    .then((cartProduct) => {
+
+        fetch('../api/v1/products/' + cartProduct.productId, {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'x-access-token': localStorage.getItem('token'),
+                'user-id': localStorage.getItem('user_id')
+            }
+        })
+        .then(response => response.json())
+        .then((product) => {
+
+            var toastId = productId + "_" + amount;
+
+            var successToast = `
+            <div class="toast" id="${toastId}" data-delay="10000">
+                <div class="toast-header">
+                    <strong class="mr-auto">Successo</strong>
+                    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="toast-body">
+                    La quantità del prodotto "${product.name}" è stata aggiornata a ${cartProduct.amount}.
+                </div>
+            </div>
+            `;
+
+            $("#toast_container").append(successToast);
+            $("#" + toastId).toast();
+            $("#" + toastId).toast('show');
+
+            element.disabled = false;
+
+        });
+    });
+}
+
+function deleteProduct(element, productId) {
+
+    element.disabled = true;
+
+    fetch('../api/v1/cart/' + productId, {
+        method: 'DELETE',
+        headers: {
+            'Content-type': 'application/json',
+            'x-access-token': localStorage.getItem('token'),
+            'user-id': localStorage.getItem('user_id')
+        },
+        body: JSON.stringify({
+            amount: amount
+        })
+    })
+    .then(resp => resp.json())
+    .then((cartProduct) => {
 
         var toastId = productId + "_" + amount;
 
