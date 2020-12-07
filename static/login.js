@@ -40,8 +40,6 @@ function login() {
         window.location.href = document.referrer;
         return;
     }).catch(error => {
-        // $("#error_modal_title").text(error);
-        // $("#error_modal_body").text("Errore durante la richiesta");
         $("#error_modal").modal("show");
         $('#btn_login_text').removeClass('d-none');
         $('#btn_login_spinner').addClass('d-none');
