@@ -35,7 +35,8 @@ function loadMyProducts(){
       var imgs = [];
       var names = [];
       var descriptions = [];
-      var ids = [];
+      var ids1 = [];
+      var ids2 = [];
       var prices = [];
       var amounts = [];
       var cardBodies = [];
@@ -70,10 +71,15 @@ function loadMyProducts(){
           amounts[i] = document.createElement('li');
           amounts[i].classList = "list-group-item";
           amounts[i].innerHTML = product.amount + " disponibili";
-          ids[i] = document.createElement('a');
-          ids[i].href = "sellProducts.html?id="+ product._id;
-          ids[i].classList = "card-link";
-          ids[i].innerHTML = "Modifica";
+          ids1[i] = document.createElement('button');
+          ids1[i].addEventListener('click',function(e){window.location.href=`/sellProducts.html?id=${product._id}`},false);
+          ids1[i].classList = "card-link btn btn-primary";
+          ids1[i].innerHTML = "Modifica";
+          ids2[i] = document.createElement('button');
+          ids2[i].addEventListener('click', function(e){document.getElementById('productId').value=product._id;
+                                                        $("#deleteProduct").modal("show")}, false);
+          ids2[i].classList = "card-link btn btn-primary";
+          ids2[i].innerHTML = "Elimina";
           cardLinks[i] = document.createElement('div');
           cardLinks[i].classList = "card-body";
 
@@ -82,7 +88,8 @@ function loadMyProducts(){
           cardBodies[i].appendChild(descriptions[i]);
           cardListGroups[i].appendChild(amounts[i]);
           cardListGroups[i].appendChild(prices[i]);
-          cardLinks[i].appendChild(ids[i]);
+          cardLinks[i].appendChild(ids1[i]);
+          cardLinks[i].appendChild(ids2[i]);
           cards[i].appendChild(imgs[i]);
           cards[i].appendChild(cardBodies[i]);
           cards[i].appendChild(cardListGroups[i]);

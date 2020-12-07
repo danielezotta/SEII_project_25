@@ -16,6 +16,30 @@
             <div class="container bg-light" id="products"></div>
         </div>
         <script src="myProducts.js"></script>
+        <script src="deleteProducts.js"></script>
         <script>loadMyProducts()</script>
+
+        <!-- Modal -->
+        <div class="modal fade" id="deleteProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Attenzione</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <input id="productId" type="hidden" value=""/>
+                Sei sicuro di voler eliminare il prodotto?
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="deleteProduct(document.getElementById('productId').value)">Sì</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <script src="partials/successModal.js"></script>
     </body>
 </html>
