@@ -1,3 +1,25 @@
+var stars = [];
+
+for (let i = 0; i < 5; i++) {
+    stars[i] = document.createElement('img');
+    stars[i].style.width = "30px";
+    stars[i].style.height = "30px";
+    stars[i].src = "img/empty-star.png";
+    stars[i].addEventListener("click", function(){setScore(i+1)});
+}
+
+var scoreValue = 0;
+
+function setScore(value) {
+    for (let i = 0; i < value; i++) {
+        stars[i].src = "img/full-star.png";
+    }
+    for (let i = value; i < 5; i++) {
+        stars[i].src = "img/empty-star.png";
+    }
+    scoreValue = value;
+}
+
 /**
  * This function gets details of a product
  */
@@ -12,6 +34,16 @@ function loadPage() {
 
     const reviewsContainer = document.getElementById('reviews');
     reviewsContainer.innerHTML = '';
+
+    const emptyStar = document.createElement('img');
+    emptyStar.style.width = "30px";
+    emptyStar.style.height = "30px";
+    emptyStar.src = "img/empty-star.png";
+
+    const fullStar = document.createElement('img');
+    fullStar.style.width = "30px";
+    fullStar.style.height = "30px";
+    fullStar.src = "img/full-star.png";
 
     // Get the id of the product to display the details of
     var url_string = window.location.href;
@@ -122,11 +154,8 @@ function loadPage() {
             var scoreLabel = document.createElement('label');
             scoreLabel.innerHTML = "Voto *";
             scoreLabel.htmlFor = "score";
-            var scoreInput = document.createElement('input');
-            scoreInput.classList = "form-control";
-            scoreInput.type = "text";
+            var scoreInput = document.createElement('div');
             scoreInput.id = "score";
-            scoreInput.required = "true";
             var submitButton = document.createElement('button');
             submitButton.innerHTML = "Invia";
             //submitButton.onclick = "createReview()";
@@ -134,6 +163,9 @@ function loadPage() {
             submitButton.classList = "btn btn-primary";
             submitButton.type = "button";
 
+            for (let i = 0; i < 5; i++) {
+                scoreInput.appendChild(stars[i]);
+            }
             titleFormGroup.appendChild(titleLabel);
             titleFormGroup.appendChild(titleInput);
             textFormGroup.appendChild(textLabel);
@@ -169,7 +201,13 @@ function loadPage() {
             cardListGroup.classList = "list-group list-group-flush";
             var cardScore = document.createElement('li');
             cardScore.classList = "list-group-item";
-            cardScore.innerHTML = myReviewData.score;
+            for ( let i = 0; i < myReviewData.score; i ++){
+                cardScore.appendChild(fullStar.cloneNode());
+            }
+            for ( let i = myReviewData.score; i < 5; i ++){
+                cardScore.appendChild(emptyStar.cloneNode());
+            }
+            
             var cardText = document.createElement('li');
             cardText.classList = "list-group-item";
             cardText.style = "white-space: pre-wrap;";
@@ -200,6 +238,11 @@ function loadPage() {
         var cardScores = [];
         var cardTexts = [];
 
+        var title = document.createElement('h3');
+        title.innerHTML = "Le recensioni di altri utenti";
+
+        reviewsContainer.appendChild(title);
+
         reviews.map(function(review, i) {
             if ( review.userId == userId ){
                 return;
@@ -218,7 +261,12 @@ function loadPage() {
             cardListGroups[i].classList = "list-group list-group-flush";
             cardScores[i] = document.createElement('li');
             cardScores[i].classList = "list-group-item";
-            cardScores[i].innerHTML = review.score;
+            for ( let j = 0; j < review.score; j ++){
+                cardScores[i].appendChild(fullStar.cloneNode());
+            }
+            for ( let j = review.score; j < 5; j ++){
+                cardScores[i].appendChild(emptyStar.cloneNode());
+            }
             cardTexts[i] = document.createElement('li');
             cardTexts[i].classList = "list-group-item";
             cardTexts[i].style = "white-space: pre-wrap;";
@@ -246,7 +294,7 @@ function createReview(){
     //get data from the form
     var title = $("#title").val();
     var text = $("#text").val();
-    var score = $("#score").val();
+    var score = scoreValue;
     
     if (!title || title.length < 0) {
         return;
