@@ -77,10 +77,16 @@ function loadPage() {
         var amount = document.createElement('li');
         amount.classList = "list-group-item";
         amount.innerHTML = product.amount + " disponibili";
-        var id = document.createElement('a');
-        id.href = "new_order.html?id="+ product._id;
-        id.classList = "card-link";
-        id.innerHTML = "Acquista";
+        var id;
+        if (product.amount <= 0){
+            id = document.createElement('h4');
+            id.innerHTML = "Prodotto non disponibile";
+        } else {
+            id = document.createElement('button');
+            id.href = "new_order.html?id="+ product._id;
+            id.classList = "btn btn-primary";
+            id.innerHTML = "Acquista";
+        }
         var cardLink = document.createElement('div');
         cardLink.classList = "card-body";
         
@@ -291,6 +297,11 @@ function createReview(){
     var productId = url.searchParams.get("id");
     var userId = localStorage.getItem('user_id');
 
+    if (userIs == null){
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }
+
     //get data from the form
     var title = $("#title").val();
     var text = $("#text").val();
@@ -318,7 +329,10 @@ function createReview(){
 
     fetch('../api/v1/reviews/', {
         method: 'POST',
-        headers: { 'Content-type': 'application/json' },
+        headers: { 'Content-type': 'application/json',
+                    'x-access-token': localStorage.getItem('token'),
+                    'user-id': localStorage.getItem('user_id') 
+        },
         body: JSON.stringify(review),
     })
     .then(resp => {

@@ -14,6 +14,11 @@ function loadProducts() {
         // Get the number of products (used for the division of the products in rows)
         var number_of_products = data.length;
 
+        data.map(function(product) {
+            if ( product.amount <= 0 ){
+                number_of_products --;
+            }
+        });
         // Create an array with all the rows
         var rows = [];
         for (let i = 0; i < number_of_products; i++) {
@@ -36,7 +41,10 @@ function loadProducts() {
 
         var i = 0;
         data.map(function(product) { // Map through the results and for each run the code below
-            
+            if ( product.amount <= 0 ){
+                return;
+            }
+
             // Create all the elements for every product card
             cols[i] = document.createElement('div');
             cols[i].classList = "col-sm mb-4";
