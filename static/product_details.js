@@ -49,12 +49,12 @@ function loadProduct() {
         var buy = document.createElement('button');
         buy.addEventListener('click', function(e){window.location.href='new_order.html?id='+product._id}, false);
         buy.style = "margin-right: 5px";
-        buy.classList = "btn btn-secondary";
+        buy.classList = "btn btn-primary";
         buy.innerHTML = "Acquista"; 
         
         var cart = document.createElement('button');
         cart.addEventListener('click', function(e){viewProductsAvailable();$("#modalAggiungiAlCarrello").modal("show");}, false);
-        cart.classList = "btn btn-secondary";
+        cart.classList = "btn btn-primary";
         cart.innerHTML = "Aggiungi al carrello";
         
         var cardButton = document.createElement('div');

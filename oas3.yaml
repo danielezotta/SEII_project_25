@@ -180,8 +180,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-        
-  /products/id:
     put:
       description: Updates a specific product by an identifier
       summary: Update product
@@ -209,8 +207,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Product'
-        
+                $ref: '#/components/schemas/Product'       
     delete:
       description: Remove a product from the shop
       summary: Remove product
@@ -281,9 +278,6 @@ paths:
                   success:
                     type: string
                     example: 'false'
-                  field:
-                    type: string
-                    example: 'user_id'
                   error:
                     type: string
                     example: 'User id bad format'
@@ -777,6 +771,160 @@ paths:
                   code:
                     type: string
                     example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+
+  /cart:
+    post:
+      description: Buy all products in the cart associated with the user
+      summary: Buy all products in the cart
+      security:
+        - token : []
+        - user-id: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+                - numCard
+                - expCard
+              properties:
+                address:
+                  type: string
+                  example: 'Lorem ipsum'
+                numCard:
+                  type: number
+                  example: 1234
+                expCard:
+                  type: string
+                  example: '12/2020'
+      responses:
+        "201":
+          description: All order for products in carts have been created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/Order'
+        "400":
+          description: One of address, numCard, expCard, year, month, id_user is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  error:
+                    type: string
+                    example: 'User id bad format'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
+        "404":
+          description: User_id not found or products not available
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Product not found'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+  /cart/id:
+    post:
+      description: Add a product in the cart associated with user
+      summary: Add products in the cart
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "201":
+          description: Add product in cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: One of id product or id user is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  error:
+                    type: string
+                    example: 'User id bad format'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
+        "404":
+          description: User_id not found or product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Product not found'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
                   message:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'

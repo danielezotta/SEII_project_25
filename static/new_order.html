@@ -14,7 +14,7 @@
                 <div class="col-sm-10">
                     <select class="custom-select" id="inProvincia" required>
                         <option value="" selected>Scegli provincia...</option>
-                        <script src="regioni.js"></script>
+                        <script src="partials/regions.js"></script>
                     </select>
                 </div>
 
@@ -59,11 +59,11 @@
                 </div>
                 <br/>
                 <div id="alert_container"></div>
-                <button id="btnAcquista" type="button" class="btn btn-secondary" onclick="createOrder()">
+                <button id="btnAcquista" type="button" class="btn btn-primary" onclick="createOrder()">
                     <span id="loadAcquista" style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span id="btnTAcquista" style="display:block">Acquista</span>
                 </button>
-                <button id="btnAnnulla" type="button" class="btn btn-secondary" onclick=" window.location.href = '/index.html'">
+                <button id="btnAnnulla" type="button" class="btn btn-primary" onclick=" window.location.href = '/index.html'">
                     <span>Annulla</span>
                 </button>
             </div>
@@ -82,9 +82,9 @@
                 </div>
                 <div id="modalMsg" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button id="btnMHome" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
+                    <button id="btnMHome" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
                     <!--When token is invalid-->
-                    <button id="btnMLogin" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href = '/login.html'" style="display:none">Login</button>
+                    <button id="btnMLogin" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/login.html'" style="display:none">Login</button>
                 </div>
             </div>
         </div>

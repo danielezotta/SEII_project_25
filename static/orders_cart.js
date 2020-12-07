@@ -1,9 +1,3 @@
-var user = "5fb69e377cfaa8180c9a37aa";
-var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWZiNjllMzc3Y2ZhYTgxODBjOWEzN2FhIiwiZW1haWwiOiJtYXN0ZXJAY2lzY28uY29tIiwiaWF0IjoxNjA3MTgwMzAzLCJleHAiOjE2MDcyMjM1MDN9.4CDjley2WJ-8zNzacphgclIXgFdkOi2He6p5Hgj6Gkc";
-/*
-function acquistaCarrello(){
-    /
-}*/
 VIS = 0;
 
 /*
@@ -68,7 +62,31 @@ function viewStatusOrder(st, res) {
             msg = "Prodotti non trovati nel carrello";
             vis = 2;
         }else{
-            msg = "Prodotti non disponibili";
+            msg = msg + `<div class="card">
+                            <h5 class="card-header">Prodotti cancellati dal carrello</h5>
+                            <div class="card-body">
+                                <ul class="list-group">`;
+            res.del.forEach(function(del){
+                msg = msg + `<li class="list-group-item">
+                                ${del.name}
+                            </li>`;
+            });
+            msg = msg + `   </div>
+                        </div>
+                        <hr/>
+                        <div class="card">
+                        <h5 class="card-header">Prodotti aggiornati nel carrello</h5>
+                        <div class="card-body">
+                            <ul class="list-group">`;
+            res.up.forEach(function(up){
+                    msg = msg + `<li class="list-group-item d-flex justify-content-between align-items-center">
+                                    ${up.name}
+                                    <span class="badge badge-primary badge-pill">${up.amount}</span>
+                                </li>`;
+            });
+            msg = msg + `       </ul>
+                            </div>
+                        </div>`;
             vis = 2;
         }
     }else if( st==500 ){
@@ -79,8 +97,8 @@ function viewStatusOrder(st, res) {
         vis = 2;
     }
 
-    document.getElementById("modalMsg").innerText = `${msg}`;
-    $("#Modal").modal("show");
+    document.getElementById("modalMsg").innerHTML = `${msg}`;
+    $("#modalError").modal("show");
     return vis;
 }
 
@@ -156,10 +174,6 @@ function createOrders(){
      * control of input data,
      * control of token
      */
-    var url_string = window.location.href;
-    var url = new URL(url_string);
-    var product_id = url.searchParams.get("id");
-
     var user_id = localStorage.getItem('user_id');
     var token = localStorage.getItem('token');
 
@@ -188,7 +202,6 @@ function createOrders(){
             'user-id': user_id
         },
         body: JSON.stringify({
-            product_id: product_id,
             address: address,
             numCard: numCard,
             expCard: expCard
@@ -202,6 +215,7 @@ function createOrders(){
     .then(function (data) {
         VIS = viewStatusOrder(status, data);
         viewBtnForBuy();
+        $('#modalAcquistoCarrello').modal('hide');
     })
     .catch(error => console.error(error));
 }

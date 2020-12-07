@@ -154,6 +154,10 @@ function createOrder(){
      * control of input data,
      * control of token
      */
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var product_id = url.searchParams.get("id");
+
     var user_id = localStorage.getItem('user_id');
     var token = localStorage.getItem('token');
 
@@ -183,6 +187,7 @@ function createOrder(){
             'user-id': user_id
         },
         body: JSON.stringify({
+            product_id: product_id,
             address: address,
             amount: amount,
             numCard: numCard,
