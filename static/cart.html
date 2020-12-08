@@ -13,10 +13,13 @@
         <div class="container bg-light mt-5 mb-5 pt-3 pb-3">
             <div class="row mb-3">
                 <div class="col-sm">
-                    <h2>Carrello</h2>
+                    <h2>CARRELLO</h2>
                 </div>
                 <div class="col-sm text-right">
-                    <button type="button" class="btn btn-primary">Acquista</button>
+                    <div class="border p-2 border-dark rounded float-right">
+                        <p class="h4 p-1">Totale : <span id="cart_total_euros" class="h3">0</span> €</p>
+                        <button type="button p-1" class="btn btn-primary">Acquista</button>
+                    </div>
                 </div>
             </div>
             <div class="text-center m-5" id="loading_cart">
@@ -28,22 +31,28 @@
             </div>
         </div>
 
+        <input type="hidden" id="delete_product_id" value="">
+        <input type="hidden" id="delete_product_name" value="">
+        <input type="hidden" id="delete_product_name" value="">
+        <input type="hidden" id="delete_product_name" value="">
+
         <!-- confirmation modal -->
-        <div class="modal fade" id="error_modal" tabindex="-1" aria-labelledby="error_modal_title" aria-hidden="true">
+        <div class="modal fade" id="confirm_modal" tabindex="-1" aria-labelledby="confirm_modal_title" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="error_modal_title"></h5>
+                        <h5 class="modal-title" id="confirm_modal_title"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p id="error_modal_body">
+                        <p id="confirm_modal_body">
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annulla</button>
+                        <button type="button" class="btn btn-primary">Conferma</button>
                     </div>
                 </div>
             </div>

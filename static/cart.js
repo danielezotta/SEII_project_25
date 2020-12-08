@@ -1,3 +1,4 @@
+
 function loadCart() {
 
     fetch('../api/v1/cart/', {
@@ -61,7 +62,7 @@ function loadCart() {
                                         <p class="h4">${product.name}</p>
                                     </div>
                                     <div class="col-sm  text-right">
-                                        <p class="btn btn-outline-danger" onclick="deleteProduct(this, '${item.productId}', '${product.name}')">
+                                        <p class="btn btn-outline-danger" onclick="deleteProductConfirmation(this, '${item.productId}', '${product.name}', ${product.price}, ${item.amount})">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -74,7 +75,7 @@ function loadCart() {
                                     <div class="col-sm">
                                         <div class="form-inline">
                                             <label class="my-1 mr-2" for="cart-item-amount">Quantità </label>
-                                            <input class="my-1 mr-sm-2 form-control col-md-3" type="number" id="cart-item-amount" value="${item.amount}" min="1" max="${product.amount}" onchange="changeProductAmount(this, '${item.productId}')"/>
+                                            <input class="my-1 mr-sm-2 form-control col-md-3" type="number" id="cart-item-amount" value="${item.amount}" min="1" max="${product.amount}" onchange="changeProductAmount(this, '${item.productId}', '${product.price}')"/>
                                             <div class="spinner-border text-primary d-none" role="status" id="loading_amount_${item.productId}">
                                                 <span class="sr-only">Caricamento...</span>
                                             </div>
@@ -88,6 +89,8 @@ function loadCart() {
                         </div>
                     </div>
                 </div>`).hide().appendTo("#cart_container").fadeIn("slow");
+
+                $("#cart_total_euros").text((product.price * item.amount) + parseInt($("#cart_total_euros").text()));
 
             })
             .catch(error => {
@@ -104,18 +107,16 @@ function loadCart() {
     })
     .catch(error => {
         $("#error_modal").modal("show");
-        $('#btn_login_text').removeClass('d-none');
-        $('#btn_login_spinner').addClass('d-none');
-        $("#btn_login").attr("disabled", false);
     });
 
 };
 
-function changeProductAmount(element, productId) {
+function changeProductAmount(element, productId, price) {
 
     $("#loading_amount_" + productId).removeClass("d-none");
     element.disabled = true;
     var amount = element.value;
+    var prevAmount = element.defaultValue;
 
     fetch('../api/v1/cart/' + productId, {
         method: 'PUT',
@@ -192,28 +193,43 @@ function changeProductAmount(element, productId) {
             $("#" + toastId).toast('show');
 
             element.disabled = false;
+            element.defaultValue = amount;
             $("#loading_amount_" + productId).addClass("d-none");
+            $("#cart_total_euros").text(parseInt($("#cart_total_euros").text()) + (price * (amount - prevAmount)));
 
         })
         .catch(error => {
             $("#error_modal").modal("show");
-            $('#btn_login_text').removeClass('d-none');
-            $('#btn_login_spinner').addClass('d-none');
-            $("#btn_login").attr("disabled", false);
+            element.disabled = false;
         });
 
     })
     .catch(error => {
         $("#error_modal").modal("show");
-        $('#btn_login_text').removeClass('d-none');
-        $('#btn_login_spinner').addClass('d-none');
-        $("#btn_login").attr("disabled", false);
+        element.disabled = false;
     });
 }
 
-function deleteProduct(element, productId, productName) {
+function deleteProductConfirmation(element, productId, productName, price, amount) {
+    $("#delete_product_id").val(productId);
+    $("#delete_product_name").val(productName);
+    $("#confirm_modal_title").text(`Eliminare ${productName} dal carrello?`);
+    $("#confirm_modal_body").html(`L'oggetto verrà <i>${productName}</i> rimosso dal carrello.`);
+    $("#confirm_modal").modal("show");
+    $("#confirm_modal .btn-primary").on("click", function() {
+        deleteProduct();
+        $(element).closest(".card").fadeOut("slow", function (){
+            $(element).closest(".card").remove();
+            $("#navbar_cart_total").text($("#navbar_cart_total").text() - 1);
+            $("#cart_total_euros").text(parseInt($("#cart_total_euros").text()) - (amount * price));
+        });
+    });
+}
 
-    element.disabled = true;
+function deleteProduct() {
+
+    var productId = $("#delete_product_id").val();
+    var productName = $("#delete_product_name").val();
 
     fetch('../api/v1/cart/' + productId, {
         method: 'DELETE',
@@ -259,17 +275,12 @@ function deleteProduct(element, productId, productName) {
         $("#" + toastId).toast();
         $("#" + toastId).toast('show');
 
-        $(element).closest(".card").fadeOut("slow", function (){
-            $(element).closest(".card").remove();
-            $("#navbar_cart_total").text($("#navbar_cart_total").text() - 1);
-        });
+        $("#confirm_modal").modal("hide");
 
     })
     .catch(error => {
+        $("#confirm_modal").modal("hide");
         $("#error_modal").modal("show");
-        $('#btn_login_text').removeClass('d-none');
-        $('#btn_login_spinner').addClass('d-none');
-        $("#btn_login").attr("disabled", false);
     });
 }
 
