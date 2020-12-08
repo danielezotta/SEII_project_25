@@ -7,12 +7,15 @@ function deleteProduct(productId){
   var user_id = localStorage.getItem('user_id');
 
   fetch(`../api/v1/products/${productId}`, {
-      method: 'DELETE',
+      method: 'PUT',
       headers: {
           'Content-Type': 'application/json',
           'user-id': user_id,
           'x-access-token': token
-      }
+      },
+      body: JSON.stringify({
+        amount: 0
+      })
   })
   .then((resp) => {
                   if(!resp.ok){

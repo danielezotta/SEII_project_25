@@ -3,8 +3,6 @@ function loadMyProducts(){
   const container = document.getElementById('products');
   container.innerHTML = '';
 
-  console.log(localStorage.getItem('user_id'));
-
   var user_id = localStorage.getItem('user_id');
   var token = localStorage.getItem('token');
 
@@ -48,56 +46,60 @@ function loadMyProducts(){
       data.map(function(product) { // Map through the results and for each run the code below
 
           // Create all the elements for every product card
-          cols[i] = document.createElement('div');
-          cols[i].classList = "col-sm mb-4";
-          cards[i] = document.createElement('div');
-          cards[i].classList = "card";
-          imgs[i] = document.createElement('img');
-          imgs[i].src = product.image;
-          imgs[i].classList = "card-img-top";
-          names[i] = document.createElement('h5');
-          names[i].classList = "card-title";
-          names[i].innerHTML = "<strong>" + product.name + "</strong>";
-          descriptions[i] = document.createElement('p');
-          descriptions[i].classList = "card-text";
-          descriptions[i].innerHTML = product.description;
-          cardBodies[i] = document.createElement('div');
-          cardBodies.classList = "card-body";
-          cardListGroups[i] = document.createElement('ul');
-          cardListGroups[i].classList = "list-group list-group-flush";
-          prices[i] = document.createElement('li');
-          prices[i].classList = "list-group-item";
-          prices[i].innerHTML = "<strong>" + product.price + "€</strong>";
-          amounts[i] = document.createElement('li');
-          amounts[i].classList = "list-group-item";
-          amounts[i].innerHTML = product.amount + " disponibili";
-          ids1[i] = document.createElement('button');
-          ids1[i].addEventListener('click',function(e){window.location.href=`/sellProducts.html?id=${product._id}`},false);
-          ids1[i].classList = "card-link btn btn-primary";
-          ids1[i].innerHTML = "Modifica";
-          ids2[i] = document.createElement('button');
-          ids2[i].addEventListener('click', function(e){document.getElementById('productId').value=product._id;
-                                                        $("#deleteProduct").modal("show")}, false);
-          ids2[i].classList = "card-link btn btn-primary";
-          ids2[i].innerHTML = "Elimina";
-          cardLinks[i] = document.createElement('div');
-          cardLinks[i].classList = "card-body";
 
-          // Append all the element to eachother
-          cardBodies[i].appendChild(names[i]);
-          cardBodies[i].appendChild(descriptions[i]);
-          cardListGroups[i].appendChild(amounts[i]);
-          cardListGroups[i].appendChild(prices[i]);
-          cardLinks[i].appendChild(ids1[i]);
-          cardLinks[i].appendChild(ids2[i]);
-          cards[i].appendChild(imgs[i]);
-          cards[i].appendChild(cardBodies[i]);
-          cards[i].appendChild(cardListGroups[i]);
-          cards[i].appendChild(cardLinks[i]);
-          cols[i].appendChild(cards[i]);
-          rows[Math.floor(i/3)].appendChild(cols[i]);
+          if(product.amount>0){
+            cols[i] = document.createElement('div');
+            cols[i].classList = "col-sm mb-4";
+            cards[i] = document.createElement('div');
+            cards[i].classList = "card";
+            imgs[i] = document.createElement('img');
+            imgs[i].src = product.image;
+            imgs[i].classList = "card-img-top";
+            names[i] = document.createElement('h5');
+            names[i].classList = "card-title";
+            names[i].innerHTML = "<strong>" + product.name + "</strong>";
+            descriptions[i] = document.createElement('p');
+            descriptions[i].classList = "card-text";
+            descriptions[i].innerHTML = product.description;
+            cardBodies[i] = document.createElement('div');
+            cardBodies.classList = "card-body";
+            cardListGroups[i] = document.createElement('ul');
+            cardListGroups[i].classList = "list-group list-group-flush";
+            prices[i] = document.createElement('li');
+            prices[i].classList = "list-group-item";
+            prices[i].innerHTML = "<strong>" + product.price + "€</strong>";
+            amounts[i] = document.createElement('li');
+            amounts[i].classList = "list-group-item";
+            amounts[i].innerHTML = product.amount + " disponibili";
+            ids1[i] = document.createElement('button');
+            ids1[i].addEventListener('click',function(e){window.location.href=`/sellProducts.html?id=${product._id}`},false);
+            ids1[i].classList = "card-link btn btn-primary";
+            ids1[i].innerHTML = "Modifica";
+            ids2[i] = document.createElement('button');
+            ids2[i].addEventListener('click', function(e){document.getElementById('productId').value=product._id;
+                                                          $("#deleteProduct").modal("show")}, false);
+            ids2[i].classList = "card-link btn btn-primary";
+            ids2[i].innerHTML = "Elimina";
+            cardLinks[i] = document.createElement('div');
+            cardLinks[i].classList = "card-body";
 
-          i ++;
+            // Append all the element to eachother
+            cardBodies[i].appendChild(names[i]);
+            cardBodies[i].appendChild(descriptions[i]);
+            cardListGroups[i].appendChild(amounts[i]);
+            cardListGroups[i].appendChild(prices[i]);
+            cardLinks[i].appendChild(ids1[i]);
+            cardLinks[i].appendChild(ids2[i]);
+            cards[i].appendChild(imgs[i]);
+            cards[i].appendChild(cardBodies[i]);
+            cards[i].appendChild(cardListGroups[i]);
+            cards[i].appendChild(cardLinks[i]);
+            cols[i].appendChild(cards[i]);
+            rows[Math.floor(i/3)].appendChild(cols[i]);
+            i ++;
+          }
+
+
       })
       while (i%3 != 0){ // Pad the last row with empty columns to have 3 columns in each row
           let emptyCol = document.createElement('div');
