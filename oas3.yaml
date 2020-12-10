@@ -837,7 +837,7 @@ paths:
                     type: string
                     example: 'Failed to authenticate token'
         "404":
-          description: User_id not found or products not available
+          description: User_id or product id not found
           content:
             application/json:
               schema:
@@ -849,6 +849,17 @@ paths:
                   message:
                     type: string
                     example: 'Product not found'
+        "404":
+          description: products not available
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: array
+                  items: 
+                    $ref: '#/components/schemas/Product'
+        
         "500":
           description: The request to the database gone wrong.
           content:

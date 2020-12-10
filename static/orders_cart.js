@@ -164,7 +164,7 @@ function ctrlInput(){
 }
 
 /*
- * Fuction to send a request to confirm a order
+ * Function to send a request to confirm a order
  */
 function createOrders(){
 
