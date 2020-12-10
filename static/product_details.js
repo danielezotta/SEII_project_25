@@ -20,6 +20,73 @@ function setScore(value) {
     scoreValue = value;
 }
 
+// Function that creates review form
+function loadForm(myReview, review = false){
+    var title = document.createElement('h3');
+    title.innerHTML = "Lascia una recensione!";
+    var form = document.createElement('form');
+    var titleFormGroup = document.createElement('div');
+    titleFormGroup.classList = "form-group";
+    var titleLabel = document.createElement('label');
+    titleLabel.innerHTML = "Titolo *";
+    titleLabel.htmlFor = "title";
+    var titleInput = document.createElement('input');
+    titleInput.classList = "form-control";
+    titleInput.type = "text";
+    titleInput.id = "title";
+    titleInput.required = "true";
+    var textFormGroup = document.createElement('div');
+    textFormGroup.classList = "form-group";
+    var textLabel = document.createElement('label');
+    textLabel.innerHTML = "Testo *";
+    textLabel.htmlFor = "text";
+    var textInput = document.createElement('textarea');
+    textInput.classList = "form-control";
+    textInput.id = "text";
+    textInput.style.height = "250px";
+    textInput.required = "true";
+    var scoreFormGroup = document.createElement('div');
+    scoreFormGroup.classList = "form-group";
+    var scoreLabel = document.createElement('label');
+    scoreLabel.innerHTML = "Voto *";
+    scoreLabel.htmlFor = "score";
+    var scoreInput = document.createElement('div');
+    scoreInput.id = "score";
+    var submitButton = document.createElement('button');
+    submitButton.innerHTML = "Invia";
+    if ( review ){
+        submitButton.addEventListener('click', function(e){submitEditedReview(review._id)}, false);
+    } else {
+        submitButton.addEventListener('click', function(e){createReview()}, false);
+    }
+    submitButton.classList = "btn btn-primary";
+    submitButton.type = "button";
+
+    if ( review ){
+        setScore(review.score);
+        titleInput.value = review.title;
+        textInput.value = review.text;
+    }
+
+    for (let i = 0; i < 5; i++) {
+        scoreInput.appendChild(stars[i]);
+    }
+    titleFormGroup.appendChild(titleLabel);
+    titleFormGroup.appendChild(titleInput);
+    textFormGroup.appendChild(textLabel);
+    textFormGroup.appendChild(textInput);
+    scoreFormGroup.appendChild(scoreLabel);
+    scoreFormGroup.appendChild(scoreInput);
+
+    form.appendChild(titleFormGroup);
+    form.appendChild(textFormGroup);
+    form.appendChild(scoreFormGroup);
+    form.appendChild(submitButton);
+
+    myReview.appendChild(title);
+    myReview.appendChild(form);
+}
+
 /**
  * This function gets details of a product
  */
@@ -132,60 +199,7 @@ function loadPage() {
             // Get the number of reviews
             number_of_reviews = reviews.length;
 
-            var title = document.createElement('h3');
-            title.innerHTML = "Lascia una recensione!";
-            var form = document.createElement('form');
-            var titleFormGroup = document.createElement('div');
-            titleFormGroup.classList = "form-group";
-            var titleLabel = document.createElement('label');
-            titleLabel.innerHTML = "Titolo *";
-            titleLabel.htmlFor = "title";
-            var titleInput = document.createElement('input');
-            titleInput.classList = "form-control";
-            titleInput.type = "text";
-            titleInput.id = "title";
-            titleInput.required = "true";
-            var textFormGroup = document.createElement('div');
-            textFormGroup.classList = "form-group";
-            var textLabel = document.createElement('label');
-            textLabel.innerHTML = "Testo *";
-            textLabel.htmlFor = "text";
-            var textInput = document.createElement('textarea');
-            textInput.classList = "form-control";
-            textInput.id = "text";
-            textInput.style.height = "250px";
-            textInput.required = "true";
-            var scoreFormGroup = document.createElement('div');
-            scoreFormGroup.classList = "form-group";
-            var scoreLabel = document.createElement('label');
-            scoreLabel.innerHTML = "Voto *";
-            scoreLabel.htmlFor = "score";
-            var scoreInput = document.createElement('div');
-            scoreInput.id = "score";
-            var submitButton = document.createElement('button');
-            submitButton.innerHTML = "Invia";
-            //submitButton.onclick = "createReview()";
-            submitButton.addEventListener('click', function(e){createReview()}, false);
-            submitButton.classList = "btn btn-primary";
-            submitButton.type = "button";
-
-            for (let i = 0; i < 5; i++) {
-                scoreInput.appendChild(stars[i]);
-            }
-            titleFormGroup.appendChild(titleLabel);
-            titleFormGroup.appendChild(titleInput);
-            textFormGroup.appendChild(textLabel);
-            textFormGroup.appendChild(textInput);
-            scoreFormGroup.appendChild(scoreLabel);
-            scoreFormGroup.appendChild(scoreInput);
-
-            form.appendChild(titleFormGroup);
-            form.appendChild(textFormGroup);
-            form.appendChild(scoreFormGroup);
-            form.appendChild(submitButton);
-
-            myReview.appendChild(title);
-            myReview.appendChild(form);
+            loadForm(myReview);
         } else {
             // Get the number of reviews
             number_of_reviews = reviews.length - 1;
@@ -213,15 +227,30 @@ function loadPage() {
             for ( let i = myReviewData.score; i < 5; i ++){
                 cardScore.appendChild(emptyStar.cloneNode());
             }
-            
+            var cardButtons = document.createElement('ul');
+            cardButtons.classList = "list-group list-group-flush text-right";
+            cardButtonsDiv = document.createElement('div');
+            var editReviewButton = document.createElement('button');
+            editReviewButton.classList = "btn btn-primary m-2";
+            editReviewButton.innerHTML = "Modifica";
+            editReviewButton.addEventListener('click', function(e){editReview(myReviewData)}, false);
+            var deleteReviewButton = document.createElement('button');
+            deleteReviewButton.classList = "btn btn-primary m-2";
+            deleteReviewButton.innerHTML = "Elimina";
+            deleteReviewButton.addEventListener('click', function(e){deleteReview(myReviewData._id)}, false);
+
             var cardText = document.createElement('li');
             cardText.classList = "list-group-item";
             cardText.style = "white-space: pre-wrap;";
             cardText.innerHTML = myReviewData.text;
 
+            cardButtonsDiv.appendChild(editReviewButton);
+            cardButtonsDiv.appendChild(deleteReviewButton);
+            cardButtons.appendChild(cardButtonsDiv);
             cardTitleGroup.appendChild(cardTitle);
             cardListGroup.appendChild(cardScore);
             cardListGroup.appendChild(cardText);
+            cardListGroup.appendChild(cardButtons);
             card.appendChild(cardTitleGroup);
             card.appendChild(cardListGroup);
             row.appendChild(card);
@@ -297,7 +326,7 @@ function createReview(){
     var productId = url.searchParams.get("id");
     var userId = localStorage.getItem('user_id');
 
-    if (userIs == null){
+    if (userId == null){
         window.location.href = "product_details.html?id=" + productId;
         return;
     }
@@ -353,4 +382,99 @@ function createReview(){
     }).catch(error => {
         console.log(error);
     });
+}
+
+function submitEditedReview(reviewId){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var productId = url.searchParams.get("id");
+    var userId = localStorage.getItem('user_id');
+
+    if (userId == null){
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }
+
+    //get data from the form
+    var title = $("#title").val();
+    var text = $("#text").val();
+    var score = scoreValue;
+    
+    if (!title || title.length < 0) {
+        return;
+    }
+
+    if (!text || text.length < 0) {
+        return;
+    }
+
+    if (!score || score < 1 || score > 5){
+        return;
+    }
+
+    var review = {
+        title: title,
+        score: score,
+        text: text,
+        productId: productId,
+        userId: userId
+    }
+
+    fetch('../api/v1/reviews/' + reviewId, {
+        method: 'PUT',
+        headers: { 'Content-type': 'application/json',
+                    'x-access-token': localStorage.getItem('token'),
+                    'user-id': localStorage.getItem('user_id') 
+        },
+        body: JSON.stringify(review),
+    })
+    .then(resp => {
+        if (!resp.ok) {
+            if (resp.status == 400) {
+                console.log("Errore 400: Alcuni dati sono errati");
+            } else {
+                console.log("Errore 500: Errore di comunicazione con il server");
+            }
+        } else {
+            resp.json();
+        }
+    })
+    
+    .then(function() {
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }).catch(error => {
+        console.log(error);
+    });
+}
+
+function deleteReview(reviewId){
+    var url_string = window.location.href;
+    var url = new URL(url_string);
+    var productId = url.searchParams.get("id");
+
+    if (localStorage.getItem('user_id') == null){
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }
+
+    fetch('../api/v1/reviews/' + reviewId, {
+        method: 'DELETE',
+        headers: { 'Content-type': 'application/json',
+                    'x-access-token': localStorage.getItem('token'),
+                    'user-id': localStorage.getItem('user_id') 
+        }
+    })
+    .then(function() {
+        window.location.href = "product_details.html?id=" + productId;
+        return;
+    }).catch(error => {
+        console.log(error);
+    });
+}
+
+function editReview(review){
+    const myReview = document.getElementById('myReview');
+    myReview.innerHTML = '';
+    loadForm(myReview, review);
 }
