@@ -1,3 +1,5 @@
+// This for and the setScore function are used to manage the star rating
+// in the forms to create and edit reviews
 var stars = [];
 
 for (let i = 0; i < 5; i++) {
@@ -20,7 +22,7 @@ function setScore(value) {
     scoreValue = value;
 }
 
-// Function that creates review form
+// Function that creates the review form, both to create and edit reviews
 function loadForm(myReview, review = false){
     var title = document.createElement('h3');
     title.innerHTML = "Lascia una recensione!";
@@ -87,12 +89,11 @@ function loadForm(myReview, review = false){
     myReview.appendChild(form);
 }
 
-/**
- * This function gets details of a product
- */
+// This function gets details of a product
+
 function loadPage() {
 
-    // Get the container and empty it
+    // Get the containers and empty it
     const container = document.getElementById('product');
     container.innerHTML = '';
 
@@ -320,6 +321,7 @@ function loadPage() {
     .catch( error => console.error(error) );
 }
 
+// Function that interacts with the API and sends the data from the form to create a new review
 function createReview(){
     var url_string = window.location.href;
     var url = new URL(url_string);
@@ -384,6 +386,7 @@ function createReview(){
     });
 }
 
+// This function interacts with the API to edit the review
 function submitEditedReview(reviewId){
     var url_string = window.location.href;
     var url = new URL(url_string);
@@ -448,6 +451,7 @@ function submitEditedReview(reviewId){
     });
 }
 
+// This function interacts with the API to delete a review
 function deleteReview(reviewId){
     var url_string = window.location.href;
     var url = new URL(url_string);
@@ -473,6 +477,7 @@ function deleteReview(reviewId){
     });
 }
 
+// This function loads the "edit review" form and gives it the current review data
 function editReview(review){
     const myReview = document.getElementById('myReview');
     myReview.innerHTML = '';
