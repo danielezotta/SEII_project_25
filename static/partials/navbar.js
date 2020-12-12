@@ -54,6 +54,7 @@ if (localStorage.getItem('token') !== null && localStorage.getItem('user_id') !=
                         <a class="dropdown-item" href="#">I miei prodotti</a>
                         <a class="dropdown-item" href="#">Metti in vendita</a>
                         <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="edit_user.html">Il mio profilo</a>
                         <a class="dropdown-item" href="logout.html">Logout</a>
                     </div>
                 </li>
