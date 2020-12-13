@@ -30,6 +30,56 @@
             <hr class="mt-5 mb-5"/>
             <div class="container bg-light" id="reviews"></div>
         </div>
+
+        <!--Modal for input amount to add in cart-->
+        <div class="modal fade" id="modalAggiungiAlCarrello" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">Aggiungi al carrello: </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="form-group row" style="padding:15px">
+                        <label for="inAmount" class="col-4 col-form-label">N° prodotti:</label>
+                        <div class="col-3">
+                          <input class="form-control" type="number" min="1" value="1" id="inAmount" required>
+                        </div>
+                        <div class="input-group-prepend">
+                            <div id="outAmount" class="input-group-text">/</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnAggiungi" type="button" class="btn btn-primary" onclick="addInCart()">
+                            <span id="loadAggiungi" style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            <span id="btnTAggiungi" style="display:block" >Aggiungi</span>
+                        </button>
+                        <button id="btnMHome" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Modal for error of input-->
+        <div class="modal fade" id="modalError" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="ModalLabel">Carrello</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="modalMsg" class="modal-body"></div>
+                        <button id="btnMHome" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
+                        <!--When token is invalid-->
+                        <button id="btnMLogin" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/login.html'" style="display:none">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <script src="product_details.js"></script>
         <script>loadPage()</script>
     </body>

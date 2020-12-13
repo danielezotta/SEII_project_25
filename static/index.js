@@ -71,7 +71,7 @@ function loadProducts() {
             amounts[i].innerHTML = product.amount + " disponibili";
             ids[i] = document.createElement('a');
             ids[i].href = "product_details.html?id="+ product._id;
-            ids[i].classList = "card-link";
+            ids[i].classList = "card-link btn btn-primary";
             ids[i].innerHTML = "Dettagli";
             cardLinks[i] = document.createElement('div');
             cardLinks[i].classList = "card-body";

@@ -35,13 +35,13 @@ document.write(
     <option value="Ferrara">Ferrara</option>
     <option value="Firenze">Firenze</option>
     <option value="Foggia">Foggia</option>
-    <option value="Forlì-Cesena">Forl&#236-Cesena</option>
+    <option value="ForlÃ¬-Cesena">Forl&#236-Cesena</option>
     <option value="Frosinone">Frosinone</option>
     <option value="Genova">Genova</option>
     <option value="Gorizia">Gorizia</option>
     <option value="Grosseto">Grosseto</option>
     <option value="Imperia">Imperia</option>
-    <option value="isernia">isernia</option>
+    <option value="Isernia">isernia</option>
     <option value="L'Aquila">L'Aquila</option>
     <option value="La Spezia">La Spezia</option>
     <option value="Latina">Latina</option>

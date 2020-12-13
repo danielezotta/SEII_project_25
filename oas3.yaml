@@ -21,27 +21,6 @@ components:
       name: user-id
       in: header
   schemas:
-    Review:
-      type: object
-      properties:
-        self:
-          type: string
-          example: /reviews/2
-        title:
-          type: string
-          example: 'Review title'
-        text:
-          type: string
-          example: 'This product is good'
-        score:
-          type: number
-          example: 5
-        userId:
-          type: string
-          example: '5fb3db2f227c832e08526448'
-        productId:
-          type: string
-          example: '5fb91302291e8870ac97748a'
     User:
       type: object
       properties:
@@ -105,6 +84,27 @@ components:
         expCard:
           type: string
           example: '12/2020'
+    Review:
+      type: object
+      properties:
+        self:
+          type: string
+          example: /reviews/2
+        title:
+          type: string
+          example: 'Review title'
+        text:
+          type: string
+          example: 'This product is good'
+        score:
+          type: number
+          example: 5
+        userId:
+          type: string
+          example: '5fb3db2f227c832e08526448'
+        productId:
+          type: string
+          example: '5fb91302291e8870ac97748a'
 
 paths:
   /products:
@@ -127,7 +127,6 @@ paths:
               schema:
                 type: string
                 example: 'The request to the database went wrong. Try later or contact us.'
-  
   /products/id:
     get:
       description: Retrieves a specific product given an id
@@ -146,7 +145,7 @@ paths:
               schema:
                 type: string
                 example: "The product can't be found."
-          
+
         "500":
           description: Server error
           content:
@@ -201,8 +200,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-        
-  /products/id:
     put:
       description: Updates a specific product by an identifier
       summary: Update product
@@ -231,7 +228,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-        
     delete:
       description: Remove a product from the shop
       summary: Remove product
@@ -254,7 +250,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
-  
   /orders:
     post:
       description: Add a new order and returns it
@@ -302,12 +297,22 @@ paths:
                   success:
                     type: string
                     example: 'false'
-                  field:
-                    type: string
-                    example: 'user_id'
                   error:
                     type: string
                     example: 'User id bad format'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided.'
         "403":
           description: No valid token provided.
           content:
@@ -315,12 +320,12 @@ paths:
               schema:
                 type: object
                 properties:
-                  success:
+                  code:
                     type: string
                     example: 'false'
                   message:
                     type: string
-                    example: 'Failed to authenticate token.'
+                    example: 'Failed to authenticate token'
         "404":
           description: Product_id or User_id not found
           content:
@@ -362,6 +367,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Order'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided.'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
         "404":
           description: Order_id with User_id not found
           content:
@@ -388,7 +419,6 @@ paths:
                   message:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'
-
   /orders/id:
     get:
       description: get specific order associated with id_user
@@ -403,6 +433,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided.'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
         "404":
           description: Order_id with User_id not found
           content:
@@ -428,10 +484,10 @@ paths:
                     example: 'false'
                   message:
                     type: string
-                    example: 'The request to the database gone wrong. Try later or contact us.' 
+                    example: 'The request to the database gone wrong. Try later or contact us.'
     put:
       description: edit address of an order associated with id_user
-      summary: edit addresss of an order 
+      summary: edit addresss of an order
       security:
         - token : []
         - user-id: []
@@ -460,6 +516,32 @@ paths:
                   message:
                     type: string
                     example: 'update order'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided.'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
         "404":
           description: Order_id with User_id not found
           content:
@@ -485,7 +567,7 @@ paths:
                     example: 'false'
                   message:
                     type: string
-                    example: 'The request to the database gone wrong. Try later or contact us.' 
+                    example: 'The request to the database gone wrong. Try later or contact us.'
     delete:
         description: delete specific order associated with id_user
         summary: delete order
@@ -506,6 +588,32 @@ paths:
                     message:
                       type: string
                       example: 'order deleted'
+          "401":
+            description: No token provided
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      example: 'false'
+                    message:
+                      type: string
+                      example: 'No token provided.'
+          "403":
+            description: No valid token provided.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    code:
+                      type: string
+                      example: 'false'
+                    message:
+                      type: string
+                      example: 'Failed to authenticate token'
           "404":
             description: Order_id with User_id not found
             content:
@@ -531,8 +639,7 @@ paths:
                       example: 'false'
                     message:
                       type: string
-                      example: 'The request to the database gone wrong. Try later or contact us.' 
-
+                      example: 'The request to the database gone wrong. Try later or contact us.'
   /users:
     post:
       description: Add a new user to the database. It is comparable to the registration fase
@@ -801,6 +908,196 @@ paths:
                   message:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'
+  /carts:
+    post:
+      description: Buy all products in the cart associated with the user
+      summary: Buy all products in the cart
+      security:
+        - token : []
+        - user-id: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - address
+                - numCard
+                - expCard
+              properties:
+                address:
+                  type: string
+                  example: 'Lorem ipsum'
+                numCard:
+                  type: number
+                  example: 1234
+                expCard:
+                  type: string
+                  example: '12/2020'
+      responses:
+        "201":
+          description: All order for products in carts have been created.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        "400":
+          description: One of address, numCard, expCard, year, month, id_user is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  error:
+                    type: string
+                    example: 'User id bad format'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided.'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
+        "404":
+          description: User_id or product id not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Product not found'
+        "404":
+          description: products not available
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Product'
+
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+  /carts/id:
+    post:
+      description: Add a product in the cart associated with user
+      summary: Add products in the cart
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "201":
+          description: Add product in cart.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        "400":
+          description: One of id product or id user is not valid.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  error:
+                    type: string
+                    example: 'User id bad format'
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'No token provided'
+        "403":
+          description: No valid token provided.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Failed to authenticate token'
+        "404":
+          description: User_id not found or product not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'Product not found'
+        "500":
+          description: The request to the database gone wrong.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: string
+                    example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
   /reviews:
     post:
       description: Add a new review
@@ -989,7 +1286,7 @@ paths:
                     example: 'false'
                   message:
                     type: string
-                    example: 'The request to the database went wrong. Try later or contact us.' 
+                    example: 'The request to the database went wrong. Try later or contact us.'
     delete:
         description: Delete specific review
         summary: Delete order
@@ -1048,4 +1345,4 @@ paths:
                       example: 'false'
                     message:
                       type: string
-                      example: 'The request to the database went wrong. Try later or contact us.' 
+                      example: 'The request to the database went wrong. Try later or contact us.'

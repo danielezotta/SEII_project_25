@@ -5,7 +5,6 @@
     <script src="new_order.js"></script>
     <script src="partials/navbar.js"></script>
     <div class="bg-light d-flex justify-content-center" style="width:100%; padding:20px">
-
         <div class="card" style="width:80%">
             <h5 class="card-header">Ordine</h5>
             <div class="card-body">
@@ -13,49 +12,58 @@
 
                 <label for="inProvincia">Provincia:</label>
                 <div class="col-sm-10">
-                    <select class="custom-select" id="inProvincia">
+                    <select class="custom-select" id="inProvincia" required>
                         <option value="" selected>Scegli provincia...</option>
-                        <script src="regioni.js"></script>
+                        <script src="partials/regions.js"></script>
                     </select>
                 </div>
 
                 <label for="inComune">Comune:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inComune" placeholder="Inserisci comune">
+                    <input type="text" class="form-control" id="inComune" placeholder="Inserisci comune" required>
                 </div>
 
                 <label for="inVia/localita">Via/localit&#224:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inVia/localita" placeholder="Inserisci via/localit&#224">
+                    <input type="text" class="form-control" id="inVia/localita" placeholder="Inserisci via/localit&#224" required>
                 </div>
 
-                <label for="inCivico">Numero civico:</label>
+                <label for="inCivico" >Numero civico:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inCivico" placeholder="Inserisci numero civico">
+                    <input type="text" class="form-control" id="inCivico" placeholder="Inserisci numero civico" required>
                 </div>
 
                 <br />
                 <h5 class="card-title"><b>Pagamento</b></h5>
                 <label for="inNumCard">Numero carta:</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inNumCard" placeholder="Inserisci numero carta">
+                    <input type="text" class="form-control" id="inNumCard" placeholder="Inserisci numero carta" required>
                 </div>
                 <label>Scadenza:</label>
                 <div class="row col-sm-10">
                     <div class="col-sm-2">
-                        <input type="text" id="inMExpCard" class="form-control" placeholder="MM" maxlength="2">
+                        <input type="text" style="min-width:60px" id="inMExpCard" class="form-control" placeholder="MM" maxlength="2" required>
                     </div>
                     <div class="col-sm-2">
-                        <input type="text" id="inYExpCard" class="form-control" placeholder="YYYY" maxlength="4">
+                        <input type="text" style="min-width:75px" id="inYExpCard" class="form-control" placeholder="YYYY" maxlength="4" required>
+                    </div>
+                    <div class="form-group row text-right ml-auto">
+                        <label for="inAmount" class="col-5 col-form-label">N° prodotti:</label>
+                        <div class="col-4">
+                          <input class="form-control" type="number" min="1" value="1" id="inAmount" required> 
+                        </div>
+                        <div class="input-group-prepend">
+                            <div id="outAmount" class="input-group-text">/</div>
+                        </div>
                     </div>
                 </div>
-                <br />
+                <br/>
                 <div id="alert_container"></div>
-                <button id="btnAcquista" type="button" class="btn btn-secondary" onclick="createOrder()">
+                <button id="btnAcquista" type="button" class="btn btn-primary" onclick="createOrder()">
                     <span id="loadAcquista" style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     <span id="btnTAcquista" style="display:block">Acquista</span>
                 </button>
-                <button id="btnAnnulla" type="button" class="btn btn-secondary" onclick=" window.location.href = '/index.html'">
+                <button id="btnAnnulla" type="button" class="btn btn-primary" onclick=" window.location.href = '/index.html'">
                     <span>Annulla</span>
                 </button>
             </div>
@@ -63,7 +71,6 @@
     </div>
 
     <!--Modal status order-->
-    <button id="btnStOrder" type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal" style="display:none"></button>
     <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -75,12 +82,14 @@
                 </div>
                 <div id="modalMsg" class="modal-body"></div>
                 <div class="modal-footer">
-                    <button id="btnMHome" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
+                    <button id="btnMHome" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/index.html'">Torna alla home</button>
                     <!--When token is invalid-->
-                    <button id="btnMLogin" type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href = '/login.html'" style="display:none">Login</button>
+                    <button id="btnMLogin" type="button" class="btn btn-primary" data-dismiss="modal" onclick="window.location.href = '/login.html'" style="display:none">Login</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script> viewProductsAvailable()</script>
 </body>
 </html>
