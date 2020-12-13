@@ -41,12 +41,10 @@ function loadProducts() {
 
         var i = 0;
         data.map(function(product) { // Map through the results and for each run the code below
-<<<<<<< HEAD
+
             if ( product.amount <= 0 ){
                 return;
             }
-=======
->>>>>>> myProductsAndOrders
 
             // Create all the elements for every product card
             cols[i] = document.createElement('div');
