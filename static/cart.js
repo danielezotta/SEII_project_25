@@ -1,7 +1,7 @@
 
 function loadCart() {
 
-    fetch('../api/v1/cart/', {
+    fetch('../api/v1/carts/', {
         method: 'GET',
         headers: {
             'Content-type': 'application/json',
@@ -118,7 +118,7 @@ function changeProductAmount(element, productId, price) {
     var amount = element.value;
     var prevAmount = element.defaultValue;
 
-    fetch('../api/v1/cart/' + productId, {
+    fetch('../api/v1/carts/' + productId, {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json',
@@ -231,7 +231,7 @@ function deleteProduct() {
     var productId = $("#delete_product_id").val();
     var productName = $("#delete_product_name").val();
 
-    fetch('../api/v1/cart/' + productId, {
+    fetch('../api/v1/carts/' + productId, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json',
