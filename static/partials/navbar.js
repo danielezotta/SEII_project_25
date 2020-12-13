@@ -78,7 +78,7 @@ if (localStorage.getItem('token') !== null && localStorage.getItem('user_id') !=
                 </li>
                 `);
                 // Get cart number of objects
-                fetch('../api/v1/cart/', {
+                fetch('../api/v1/carts/', {
                     method: 'GET',
                     headers: {
                         'Content-type': 'application/json',
