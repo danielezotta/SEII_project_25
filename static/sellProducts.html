@@ -1,61 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>SEII_project_25</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script src="partials/header.js"></script>
 </head>
 <body>
+    <script src="sellProducts.js"></script>
+    <script src="updateProducts.js"></script>
     <div class="bg-light d-flex justify-content-center" style="width:100%; padding:20px">
 
         <div class="card" style="width:80%">
             <h5 class="card-header">Vendita</h5>
             <div class="card-body">
-                <h5 class="card-title"><b>Dati prodotto</b></h5>
+              <h5 class="card-title"><b>Dati prodotto</b></h5>
 
-                <label for="nomeProdotto">Nome prodotto:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nomeProdotto" placeholder="Inserisci prodotto">
-                </div>
+              <label for="nomeProdotto">Nome prodotto:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="nameProduct" placeholder="Inserisci prodotto">
+              </div>
 
-                <label for="immagine">Immagine:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="immagine" placeholder="Inserisci immagine">
-                </div>
+              <label for="immagine">Immagine:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="image" placeholder="Inserisci immagine">
+              </div>
 
-                <label for="descrizione">Descrizione:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="descrizione" placeholder="Inserisci descrizione">
-                </div>
+              <label for="descrizione">Descrizione:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="description" placeholder="Inserisci descrizione">
+              </div>
 
-                <label for="prezzo">Prezzo:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="prezzo" placeholder="Inserisci prezzo">
-                </div>
+              <label for="prezzo">Prezzo:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="price" placeholder="Inserisci prezzo">
+              </div>
 
-                <label for="prezzo">Numero pezzi:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nPezzi" placeholder="Inserisci numero di pezzi">
-                </div>
-
-                <label for="prezzo">ID utente:</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="prezzo" placeholder="Inserisci ID utente">
-                </div>
+              <label for="nPezzi">Numero pezzi:</label>
+              <div class="col-sm-10">
+                  <input type="text" class="form-control" id="amount" placeholder="Inserisci numero di pezzi">
+              </div>
 
                 <div class="mt-3" id="alert_container"></div>
-                <button id="btnVendi" type="button" class="btn btn-secondary" onclick="createProduct()">
-                    <span id="loadVendita" style="display:none" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    <span id="btnVendita" style="display:block">Metti in vendita</span>
-                </button>
+                <script>handlePage()</script>
                 <button id="btnAnnulla" type="button" class="btn btn-secondary" onclick=" window.location.href = '/index.html'">
                     <span>Annulla</span>
                 </button>
             </div>
         </div>
     </div>
+    <script src="partials/successModal.js"></script>
+    <script src="partials/errorModal.js"></script>
 </body>
 </html>
