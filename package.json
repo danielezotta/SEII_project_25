@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node api.js",
-    "test": "jest --testEnvironment=node --forceExit --maxConcurrency=0"
+    "test": "jest --testEnvironment=node"
   },
   "jest": {
     "verbose": true,
@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/danielezotta/SEII_project_25#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "express": "^4.17.1",
     "json-stringify": "^1.0.0",
     "jsonwebtoken": "^8.5.1",

@@ -1,9 +1,5 @@
 function register() {
 
-    $('#btn_register_text').addClass('d-none');
-    $('#btn_register_spinner').removeClass('d-none');
-    $("#btn_register").attr("disabled", true);
-
     //get the form object
     var name = $("#name").val();
     var surname = $("#surname").val();
@@ -49,6 +45,10 @@ function register() {
         return;
     }
 
+    $('#btn_register_text').addClass('d-none');
+    $('#btn_register_spinner').removeClass('d-none');
+    $("#btn_register").attr("disabled", true);
+
     var user = {
         name: name,
         surname: surname,
@@ -71,6 +71,9 @@ function register() {
                 $("#error_modal_body").text('Errore comunicazione con il server');
             }
             $("#error_modal").modal("show");
+            $('#btn_register_text').removeClass('d-none');
+            $('#btn_register_spinner').addClass('d-none');
+            $("#btn_register").attr("disabled", false);
         } else {
             resp.json();
         }
@@ -79,8 +82,6 @@ function register() {
         window.location.href = "login.html";
         return;
     }).catch(error => {
-        // $("#error_modal_title").text("Errore");
-        // $("#error_modal_body").text("Errore durante la richiesta");
         $("#error_modal").modal("show");
         $('#btn_register_text').removeClass('d-none');
         $('#btn_register_spinner').addClass('d-none');
