@@ -8,7 +8,7 @@ info:
 servers:
   - url: localhost:8000/api/v1
     description: Localhost webserver
-  - url: https://se2-project-25.herokuapp.com/
+  - url: https://se2-project-25.herokuapp.com/api/v1
     description: Heroku demo
 components:
   securitySchemes:
@@ -105,7 +105,21 @@ components:
         productId:
           type: string
           example: '5fb91302291e8870ac97748a'
-
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: "5fb291268c27d33204eaf0d3"
+        amount:
+          type: number
+          example: 5
+        userId:
+          type: string
+          example: "5fb291268c27d33204eaf0f4"
+        productId:
+          type: string
+          example: "5fb91302291e8870ac97748a"
 paths:
   /products:
     get:
@@ -114,6 +128,34 @@ paths:
       responses:
         "200":
           description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: string
+                example: 'The request to the database went wrong. Try later or contact us.'
+  /products?search:
+    get:
+      description: List of products meeting search keywords
+      summary: List of products meeting search
+      parameters:
+        - name: search
+          in: query
+          description: The string to search into products
+          required: true
+          schema:
+            type: string
+            example: "computer"
+      responses:
+        "200":
+          description: List of products meeting search
           content:
             application/json:
               schema:
@@ -758,19 +800,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "403":
-          description: No valid token provided or parameters id not equal to the header id.
+        "400":
+          description: The id product is badly formatted
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
+                  code:
                     type: string
-                    example: 'false'
+                    example: "400"
                   message:
                     type: string
-                    example: 'Token not valid'
+                    example: "The id product is badly formatted."
+        "400":
+          description: The user-id header is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The user-id header is badly formatted."
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "No token provided."
+        "403":
+          description: Failed to authenticate token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "Failed to authenticate token."
+        "403":
+          description: The token is not associated with this user-id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "The token is not associated with this user-id."
+        "404":
+          description: The user-id header can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user-id header can not be found."
         "404":
           description: The user cannot be found in the database
           content:
@@ -810,19 +917,84 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-        "403":
-          description: No valid token provided or parameters id not equal to the header id.
+        "400":
+          description: The id product is badly formatted
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
+                  code:
                     type: string
-                    example: 'false'
+                    example: "400"
                   message:
                     type: string
-                    example: 'Token not valid'
+                    example: "The id product is badly formatted."
+        "400":
+          description: The user-id header is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The user-id header is badly formatted."
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "No token provided."
+        "403":
+          description: Failed to authenticate token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "Failed to authenticate token."
+        "403":
+          description: The token is not associated with this user-id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "The token is not associated with this user-id."
+        "404":
+          description: The user-id header can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user-id header can not be found."
         "404":
           description: The user cannot be found in the database
           content:
@@ -909,6 +1081,112 @@ paths:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'
   /carts:
+    get:
+      description: Get all products currently in the cart for the logged user
+      summary: Get all products in cart
+      security:
+        - token: []
+        - user-id: []
+      responses:
+        "200":
+          description: An array of all the items in the cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Cart'
+        "400":
+          description: The user-id header is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The user-id header is badly formatted."
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "No token provided."
+        "403":
+          description: Failed to authenticate token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "Failed to authenticate token."
+        "403":
+          description: The token is not associated with this user-id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "The token is not associated with this user-id."
+        "404":
+          description: The user-id header can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user-id header can not be found."
+        "404":
+          description: The userId related cart can't be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user can't be found."
+        "500":
+          description: The userId related cart can't be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
     post:
       description: Buy all products in the cart associated with the user
       summary: Buy all products in the cart
@@ -1095,6 +1373,260 @@ paths:
                   success:
                     type: string
                     example: 'false'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+    put:
+      description: Edit the amount of a product cart item of an user
+      summary: Edit the amount of a product
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "201":
+          description: The updated product
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cart'
+        "400":
+          description: The field amount must be a number
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The field amount must be a number."
+        "400":
+          description: The id product is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The id product is badly formatted."
+        "400":
+          description: The user-id header is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The user-id header is badly formatted."
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "No token provided."
+        "403":
+          description: Failed to authenticate token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "Failed to authenticate token."
+        "403":
+          description: The token is not associated with this user-id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "The token is not associated with this user-id."
+        "404":
+          description: The user-id header can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user-id header can not be found."
+        "404":
+          description: The product can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The product can not be found."
+        "500":
+          description: The userId related cart can't be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
+                  message:
+                    type: string
+                    example: 'The request to the database gone wrong. Try later or contact us.'
+    delete:
+      description: Remove the product from the cart of the user
+      summary: Remove the product from the cart
+      security:
+        - token : []
+        - user-id: []
+      responses:
+        "200":
+          description: The updated product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userId:
+                    type: string
+                    example: "5fb3db2f227c832e085264bf"
+                  productId:
+                    type: string
+                    example: "5fb3db2f227c832e08526456"
+        "400":
+          description: The id product is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The id product is badly formatted."
+        "400":
+          description: The user-id header is badly formatted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "400"
+                  message:
+                    type: string
+                    example: "The user-id header is badly formatted."
+        "401":
+          description: No token provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "401"
+                  message:
+                    type: string
+                    example: "No token provided."
+        "403":
+          description: Failed to authenticate token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "Failed to authenticate token."
+        "403":
+          description: The token is not associated with this user-id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "403"
+                  message:
+                    type: string
+                    example: "The token is not associated with this user-id."
+        "404":
+          description: The user-id header can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The user-id header can not be found."
+        "404":
+          description: The product can not be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: "404"
+                  message:
+                    type: string
+                    example: "The product can not be found."
+        "500":
+          description: The userId related cart can't be found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: string
+                    example: '500'
                   message:
                     type: string
                     example: 'The request to the database gone wrong. Try later or contact us.'
