@@ -292,6 +292,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+  /products/myProducts/userId:
+    get:
+      description: Get all the products sold by the user with id 'userId'
+      summary: Get products
+      responses:
+        "200":
+          description: Products of the user 'userId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Error, wrong request to the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error, bad format of userId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Error, user not found or products not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+  /products/myOrders/userId:
+    get:
+      description: Get all the orders done by the user with id 'userId'
+      summary: Get orders
+      responses:
+        "200":
+          description: Orders of the user 'userId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "500":
+          description: Error, wrong request to the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "400":
+          description: Error, bad format of userId
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        "404":
+          description: Error, user not found or orders not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
   /orders:
     post:
       description: Add a new order and returns it
