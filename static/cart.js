@@ -61,8 +61,8 @@ function loadCart() {
                                     <div class="col-sm">
                                         <p class="h4">${product.name}</p>
                                     </div>
-                                    <div class="col-sm  text-right">
-                                        <p class="btn btn-outline-danger" onclick="deleteProductConfirmation(this, '${item.productId}', '${product.name}', ${product.price}, ${item.amount})">
+                                    <div class="col-sm text-right">
+                                        <p class="btn btn-outline-danger" onclick="deleteProductConfirmation(this, '${product._id}', '${encodeURIComponent(product.name)}', ${product.price})">
                                         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                             <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                                             <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -88,6 +88,7 @@ function loadCart() {
                             </div>
                         </div>
                     </div>
+                    <input type="hidden" id="amount_product_${item.productId}" value="${item.amount}">
                 </div>`).hide().appendTo("#cart_container").fadeIn("slow");
 
                 $("#cart_total_euros").text((product.price * item.amount) + parseInt($("#cart_total_euros").text()));
@@ -172,7 +173,7 @@ function changeProductAmount(element, productId, price) {
             }
         }).then((product) => {
 
-            var toastId = productId + "_" + amount;
+            var toastId = Date.now();
 
             var successToast = `
             <div class="toast" id="${toastId}" data-delay="10000">
@@ -195,6 +196,7 @@ function changeProductAmount(element, productId, price) {
             element.disabled = false;
             element.defaultValue = amount;
             $("#loading_amount_" + productId).addClass("d-none");
+            $("#amount_product_" + productId).val(amount);
             $("#cart_total_euros").text(parseInt($("#cart_total_euros").text()) + (price * (amount - prevAmount)));
 
         })
@@ -210,19 +212,22 @@ function changeProductAmount(element, productId, price) {
     });
 }
 
-function deleteProductConfirmation(element, productId, productName, price, amount) {
+function deleteProductConfirmation(element, productId, productName, price) {
     $("#delete_product_id").val(productId);
-    $("#delete_product_name").val(productName);
-    $("#confirm_modal_title").text(`Eliminare ${productName} dal carrello?`);
-    $("#confirm_modal_body").html(`L'oggetto verrà <i>${productName}</i> rimosso dal carrello.`);
+    $("#delete_product_name").val(decodeURIComponent(productName));
+    $("#confirm_modal_title").text(`Eliminare ${decodeURIComponent(productName)} dal carrello?`);
+    $("#confirm_modal_body").html(`L'oggetto verrà <i>${decodeURIComponent(productName)}</i> rimosso dal carrello.`);
     $("#confirm_modal").modal("show");
-    $("#confirm_modal .btn-primary").on("click", function() {
+    $("#confirm_modal_button_yes").on("click", function() {
         deleteProduct();
-        $(element).closest(".card").fadeOut("slow", function (){
+        $(element).closest(".card").fadeOut("slow", function () {
+            var cartTotal = parseInt($("#cart_total_euros").text());
+            var amount = $("#amount_product_" + productId).val();
+            $("#cart_total_euros").text(cartTotal - (amount * price));
+            $("#navbar_cart_total").text(parseInt($("#navbar_cart_total").text()) - 1);
             $(element).closest(".card").remove();
-            $("#navbar_cart_total").text($("#navbar_cart_total").text() - 1);
-            $("#cart_total_euros").text(parseInt($("#cart_total_euros").text()) - (amount * price));
         });
+        $("#confirm_modal_button_yes").off("click");
     });
 }
 
@@ -255,7 +260,7 @@ function deleteProduct() {
         }
     }).then((cartProduct) => {
 
-        var toastId = productId;
+        var toastId = Date.now();
 
         var successToast = `
         <div class="toast" id="${toastId}" data-delay="10000">

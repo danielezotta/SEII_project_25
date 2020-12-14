@@ -90,6 +90,8 @@ if (localStorage.getItem('token') !== null && localStorage.getItem('user_id') !=
                 .then(cart => $("#navbar_cart_total").text(cart.length));
 
         } else {
+            window.localStorage.removeItem('user_id');
+            window.localStorage.removeItem('token');
             // Not logget, option to login
             $("#navbar_status_right").html(`
                         <a class="nav-link" href="login.html">
@@ -133,6 +135,7 @@ function searchProductSuggestion() {
         })
         .then(response => response.json())
         .then((json) => {
+            $("#navbar_search_suggestions").html("");
             // Check if there is a result
             if (json.length > 0) {
                 json.forEach((item, i) => {

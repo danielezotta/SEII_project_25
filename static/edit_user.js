@@ -26,8 +26,8 @@ function getData() {
         $("#name").val(data.name);
         $("#surname").val(data.surname);
         $("#email").val(data.email);
-        $("#password").val(data.password);
-        $("#password_repeat").val(data.password);
+        $("#password").val("password");
+        $("#password_repeat").val("password");
         user.name = data.name;
         user.surname = data.surname;
         user.email = data.email;

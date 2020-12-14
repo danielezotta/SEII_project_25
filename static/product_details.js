@@ -636,6 +636,16 @@ function addInCart(){
         document.getElementById("btnTAggiungi").style.display = "block";
         document.getElementById("btnAggiungi").disable = false;
         viewStatusCart(status, data);
+        fetch('../api/v1/carts/', {
+            method: 'GET',
+            headers: {
+                'Content-type': 'application/json',
+                'x-access-token': localStorage.getItem('token'),
+                'user-id': localStorage.getItem('user_id')
+            }
+        })
+        .then(resp => resp.json())
+        .then(cart => $("#navbar_cart_total").text(cart.length));
     })
     .catch(error => console.error(error));
 
