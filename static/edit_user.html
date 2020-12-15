@@ -12,6 +12,7 @@
                 <div class="col-md-6 mt-5">
                     <form class="card p-3 bg-light mt-5">
                         <h3 class="mb-3 text-center">Modifica i tuoi dati</h3>
+                        <input type="password" class="d-none" autocomplete="new-password">
                         <div class="form-group">
                             <label for="name">Nome</label>
                             <input type="text" class="form-control" id="name" name="name">
@@ -26,11 +27,11 @@
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" autocomplete="off">
+                            <input type="password" class="form-control" id="password" name="password" autocomplete="new-password">
                         </div>
                         <div class="form-group">
                             <label for="password_repeat">Ripeti la password</label>
-                            <input type="password" class="form-control" id="password_repeat" name="password_repeat" autocomplete="off">
+                            <input type="password" class="form-control" id="password_repeat" name="password_repeat" autocomplete="new-password">
                         </div>
                         <div class="row">
                             <button type="button" class="m-4 col-sm btn btn-secondary" onClick="window.location.href = document.referrer;">Annulla</button>
