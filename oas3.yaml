@@ -198,6 +198,9 @@ paths:
     post:
       description: Add a new product and returns it
       summary: Add a new product
+      security:
+        - token : []
+        - user-id: []
       requestBody:
         content:
           application/json:
@@ -245,6 +248,9 @@ paths:
     put:
       description: Updates a specific product by an identifier
       summary: Update product
+      security:
+        - token : []
+        - user-id: []
       responses:
         "200":
           description: Product object by id
@@ -273,6 +279,9 @@ paths:
     delete:
       description: Remove a product from the shop
       summary: Remove product
+      security:
+        - token : []
+        - user-id: []
       responses:
         "200":
           description: Removed product
@@ -296,6 +305,9 @@ paths:
     get:
       description: Get all the products sold by the user with id 'userId'
       summary: Get products
+      security:
+        - token : []
+        - user-id: []
       responses:
         "200":
           description: Products of the user 'userId'
@@ -325,6 +337,9 @@ paths:
     get:
       description: Get all the orders done by the user with id 'userId'
       summary: Get orders
+      security:
+        - token : []
+        - user-id: []
       responses:
         "200":
           description: Orders of the user 'userId'
