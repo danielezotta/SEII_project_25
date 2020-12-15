@@ -69,6 +69,9 @@ function loadMyOrders(){
         amount[i] = document.createElement('td');
         amount[i].innerHTML = product.amount;
         timeStamp[i] = document.createElement('td');
+        product.timeStamp = product.timeStamp.replace("T", " - ");
+        product.timeStamp = product.timeStamp.replace("Z", "");
+        product.timeStamp = product.timeStamp.slice(0, -4);
         timeStamp[i].innerHTML = product.timeStamp;
         numCard[i] = document.createElement('td');
         numCard[i].innerHTML = product.numCard;

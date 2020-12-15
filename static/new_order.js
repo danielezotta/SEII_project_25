@@ -46,9 +46,14 @@ function viewStatusOrder(st, res) {
     var msg = "";
     var vis;
     if( st==400 ){
-        msg = msg + "Problema formato dati inviati";
-        vis = 2;
-    }else if( st==403 ){
+        if( res.error!=null && res.error!="" ){
+            msg = res.error;
+            vis = 2;
+        }else{
+            msg = "Accedere per usare la funzionalità";
+            vis = 1;
+        }   
+    }else if( st==403 || st==401 ){
         msg = "Permesso non consentito";
         document.getElementById("btnMLogin").style.display = "block";
         vis = 1;

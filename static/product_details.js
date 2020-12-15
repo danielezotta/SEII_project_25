@@ -504,14 +504,20 @@ function editReview(review){
     loadForm(myReview, review);
 }
 
+/**---------------------------------- 
+ * Manage of add the product in cart
+ * ----------------------------------
+*/
 function viewStatusCart(st, res) {
     var msg = "";
     $('#modalAggiungiAlCarrello').modal('hide');
     if( st==400 ){
         if( res.error!=null && res.error!="" ){
-            msg = msg + "Problema formato dati inviati";
+            msg = res.error;
+        }else{
+            msg = "Accedere per usare la funzionalità";
         }
-    }else if( st==403 ){
+    }else if( st==403 || st==401 ){
         msg = "Permesso non consentito";
         document.getElementById("btnMLogin").style.display = "block";
     }else if( st==404 ){
