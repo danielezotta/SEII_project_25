@@ -31,7 +31,7 @@ function getData() {
         user.name = data.name;
         user.surname = data.surname;
         user.email = data.email;
-        user.password = data.password;
+        user.password = "password";
         return;
     }).catch(error => {
         // $("#error_modal_title").text("Errore");
