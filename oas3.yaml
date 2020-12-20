@@ -1894,7 +1894,7 @@ paths:
                     example: 'The request to the database went wrong. Try later or contact us.'
     delete:
         description: Delete specific review
-        summary: Delete order
+        summary: Delete review
         security:
           - token : []
           - user-id: []
